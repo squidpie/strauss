@@ -1,0 +1,32 @@
+# nat-server-validate.yml
+# Copyright (C) 2023
+# Squidpie
+
+name: nat-server-deploy
+run-name: ${{ github.actor }} is deploying nat-server
+on:
+  push:
+    branches:
+      [dev]
+    paths:
+      [services/nats-server]
+  pull_request:
+    types: [assigned, opened, synchronize, reopened]
+    branches:
+      [dev]
+    paths:
+      [services/nats-server]
+jobs:
+  validate:
+    name: Validate nats-server
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Docker Compose strauss-nats-server
+        uses: isbang/compose-action@v1.4.1
+        with:
+          compose-file: services/nats-server/nats-server.yml
+          up-flags: -d
