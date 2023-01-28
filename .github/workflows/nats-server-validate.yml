@@ -2,20 +2,20 @@
 # Copyright (C) 2023
 # Squidpie
 
-name: nat-server-deploy
-run-name: ${{ github.actor }} is deploying nat-server
+name: nats-server-deploy
+run-name: ${{ github.actor }} is validating nats-server
 on:
   push:
     branches:
       [dev]
     paths:
-      [services/nats-server]
+      [services/nats-server/*]
   pull_request:
     types: [assigned, opened, synchronize, reopened]
     branches:
       [dev]
     paths:
-      [services/nats-server]
+      [services/nats-server/*]
 jobs:
   validate:
     name: Validate nats-server

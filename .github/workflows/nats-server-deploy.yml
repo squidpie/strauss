@@ -2,8 +2,8 @@
 # Copyright (C) 2023
 # Squidpie
 
-name: nat-server-deploy
-run-name: ${{ github.actor }} is deploying nat-server
+name: nats-server-deploy
+run-name: ${{ github.actor }} is deploying nats-server
 on:
   push:
     branches:
