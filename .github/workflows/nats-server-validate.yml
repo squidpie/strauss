@@ -2,7 +2,7 @@
 # Copyright (C) 2023
 # Squidpie
 
-name: nats-server-deploy
+name: nats-server-validate
 run-name: ${{ github.actor }} is validating nats-server
 on:
   push:
@@ -29,4 +29,3 @@ jobs:
         uses: isbang/compose-action@v1.4.1
         with:
           compose-file: services/nats-server/nats-server.yml
-          up-flags: -d
