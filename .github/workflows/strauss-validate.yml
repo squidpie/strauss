@@ -21,6 +21,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Create Docker Network
+        run: sudo docker network create nats
+
       - name: Docker Compose strauss
         uses: isbang/compose-action@v1.4.1
         with:
