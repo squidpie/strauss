@@ -1,0 +1,36 @@
+# strauss-deploy.yml
+# Copyright (C) 2023
+# Squidpie
+
+name: strauss-deploy
+run-name: ${{ github.actor }} is deploying strauss
+on:
+  push:
+    branches:
+      [prod]
+  workflow_dispatch:
+
+  deployment:
+    name: Deploy strauss
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Rsync Deployment Files
+      uses: Burnett01/rsync-deployments@5.2.1
+      with:
+        path: system/strauss-compose.yml
+        remote_path: ${{ secrets.DEPLOY_PATH }}/
+        remote_host: ${{ secrets.DEPLOY_HOST }}
+        remote_user: ${{ secrets.DEPLOY_USER }}
+        remote_key: ${{ secrets.DEPLOY_PRIV_KEY }}
+
+    - name: Docker Compose Deployment
+      uses: fifsky/ssh-action@v0.0.6
+      with:
+        host: ${{ secrets.DEPLOY_HOST }}
+        user: ${{ secrets.DEPLOY_USER }}
+        key: ${{ secrets.DEPLOY_PRIV_KEY }}
+        command: docker-compose -f ${{ secrets.DEPLOY_PATH }}/strauss-compose.yml up -d
