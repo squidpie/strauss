@@ -1,20 +1,18 @@
-# nat-server-deploy.yml
+# strauss-deploy.yml
 # Copyright (C) 2023
 # Squidpie
 
-name: nats-server-deploy
-run-name: ${{ github.actor }} is deploying nats-server
+name: strauss-deploy
+run-name: ${{ github.actor }} is deploying strauss
 on:
   push:
     branches:
       [prod]
-    paths:
-      [services/nats-server/*]
   workflow_dispatch:
 
 jobs:
   deployment:
-    name: Deploy nats-server
+    name: Deploy strauss
     runs-on: ubuntu-latest
 
     steps:
@@ -24,16 +22,16 @@ jobs:
     - name: Rsync Deployment Files
       uses: Burnett01/rsync-deployments@5.2.1
       with:
-        path: services/nats-server/nats-server.yml
+        path: system/strauss-compose.yml
         remote_path: ${{ secrets.DEPLOY_PATH }}/
         remote_host: ${{ secrets.DEPLOY_HOST }}
         remote_user: ${{ secrets.DEPLOY_USER }}
         remote_key: ${{ secrets.DEPLOY_PRIV_KEY }}
 
-    - name: Update nats-server
+    - name: Docker Compose Deployment
       uses: fifsky/ssh-action@v0.0.6
       with:
         host: ${{ secrets.DEPLOY_HOST }}
         user: ${{ secrets.DEPLOY_USER }}
         key: ${{ secrets.DEPLOY_PRIV_KEY }}
-        command: docker-compose -f ${{ secrets.DEPLOY_PATH }}/nats-server.yml up -d
+        command: docker-compose -f ${{ secrets.DEPLOY_PATH }}/strauss-compose.yml up -d
