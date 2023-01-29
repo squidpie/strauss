@@ -4,3 +4,8 @@
 
 name: strauss-deploy
 run-name: ${{ github.actor }} is deploying strauss
+
+on:
+  push:
+    branches:
+      [prod]
