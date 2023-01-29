@@ -1,0 +1,19 @@
+# strauss-compose.yml
+# Copyright (C) 2023
+# Squidpie
+
+version: "3.9"
+services:
+  nats:
+    image: nats:2.9.11
+    container_name: strauss-nats-server
+    restart: unless-stopped
+    networks: [nats]
+    ports:
+      ["8222:8222", "4222:4222"]
+    command: "--cluster_name strauss --http_port 8222"
+
+networks:
+  nats:
+    name: nats
+    external: true
