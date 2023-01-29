@@ -10,7 +10,6 @@ from confluent_kafka import Producer, Consumer, OFFSET_BEGINNING
 
 POLL_TIMEOUT = 0.25
 WATCHDOG_TIMEOUT = 1
-is_delivery_success = False
 
 def parse_args():
   # Parse the command line.
@@ -54,6 +53,7 @@ def run_producer(config):
     else:
       print("::TEST OUTPUT:: Produced event to topic {topic}: key = {key:12} value = {value:12}".format(
         topic=msg.topic(), key=msg.key().decode('utf-8'), value=msg.value().decode('utf-8')))
+      global is_delivery_success
       is_delivery_success = True
 
   producer.produce("strausstest", "0xdeadbeef", "strauss-test", callback=delivery_callback)
@@ -104,6 +104,8 @@ def run_consumer(config):
 
 
 if __name__ == '__main__':
+  global is_delivery_success
+  is_delivery_success = False
   print("::TEST OUTPUT:: PARSING ARGS")
   args = parse_args()
   config = create_config(args)
