@@ -28,3 +28,23 @@ jobs:
         uses: isbang/compose-action@v1.4.1
         with:
           compose-file: system/strauss-compose.yml
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+
+      - name: Cache Kafka Testing Environment
+        id: cache-virtualenv
+        uses: syphar/restore-virtualenv@v1
+        with:
+          requirement_files: tests/kafka/requirements.txt
+
+      - name: Restore Kafka Testing Environment
+        uses: syphar/restore-pip-download-cache@v1
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+
+      - name: Install Kafka Testing Environment
+        run: pip install -r tests/kafka/requirements.txt
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+
+      - name: Run Kafka Integration Test
+        run: ./tests/kafka/run.py tests/kafka/config.ini
