@@ -34,4 +34,4 @@ jobs:
         host: ${{ secrets.DEPLOY_HOST }}
         user: ${{ secrets.DEPLOY_USER }}
         key: ${{ secrets.DEPLOY_PRIV_KEY }}
-        command: docker-compose -f ${{ secrets.DEPLOY_PATH }}/strauss-compose.yml up -d
+        command: docker-compose -f ${{ secrets.DEPLOY_PATH }}/strauss-compose.yml up -d && nats server check
