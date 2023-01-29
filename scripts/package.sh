@@ -8,8 +8,7 @@ RelPath="packaging/${RelName}"
 mkdir -p ${RelPath}
 
 # Copy required system files
-cp -r system/ ${RelPath}/
-mv ${RelPath}/system/strauss-compose.yml ${RelPath}/
+cp system/strauss-compose.yml ${RelPath}/
 
 tar czf ${RelName}.tar.gz -C packaging ${RelName}
 mv ${RelName}.tar.gz ${RelPath}/
