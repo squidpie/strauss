@@ -10,7 +10,6 @@ on:
       [prod]
   workflow_dispatch:
 
-jobs:
   deployment:
     name: Deploy strauss
     runs-on: ubuntu-latest

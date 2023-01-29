@@ -28,3 +28,12 @@ jobs:
         uses: isbang/compose-action@v1.4.1
         with:
           compose-file: system/strauss-compose.yml
+
+      - name: Setup Kafka Testing Environment
+        run: |
+          virtualenv strauss-test
+          source strauss-test/bin/activate
+          pip install -r tests/kafka/requirements.txt
+
+      - name: Run Kafka Integration Test
+        run: ./tests/kafka/run.py tests/kafka/config.ini

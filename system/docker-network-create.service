@@ -1,7 +1,0 @@
-[Unit]
-Description=Docker Network Creation
-Requires=docker.service
-After=docker.service
-
-[Service]
-ExecStart=/usr/bin/docker network create nats
