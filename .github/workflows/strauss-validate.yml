@@ -1,0 +1,50 @@
+# strauss-validate.yml
+# Copyright (C) 2023
+# Squidpie
+
+name: strauss-validate
+run-name: ${{ github.actor }} is validating strauss
+on:
+  push:
+    branches:
+      [dev]
+  pull_request:
+    types: [assigned, opened, synchronize, reopened]
+    branches:
+      [dev]
+jobs:
+  validate:
+    name: Validate strauss
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Create Docker Network
+        run: sudo docker network create nats
+
+      - name: Docker Compose strauss
+        uses: isbang/compose-action@v1.4.1
+        with:
+          compose-file: system/strauss-compose.yml
+
+      - name: Setup Python
+        uses: actions/setup-python@v2
+
+      - name: Cache Kafka Testing Environment
+        id: cache-virtualenv
+        uses: syphar/restore-virtualenv@v1
+        with:
+          requirement_files: tests/kafka/requirements.txt
+
+      - name: Restore Kafka Testing Environment
+        uses: syphar/restore-pip-download-cache@v1
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+
+      - name: Install Kafka Testing Environment
+        run: pip install -r tests/kafka/requirements.txt
+        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
+
+      - name: Run Kafka Integration Test
+        run: ./tests/kafka/run.py tests/kafka/config.ini
