@@ -1,31 +1,30 @@
-# nat-server-validate.yml
+# strauss-validate.yml
 # Copyright (C) 2023
 # Squidpie
 
-name: nats-server-validate
-run-name: ${{ github.actor }} is validating nats-server
+name: strauss-validate
+run-name: ${{ github.actor }} is validating strauss
 on:
   push:
     branches:
       [dev]
-    paths:
-      [services/nats-server/*]
   pull_request:
     types: [assigned, opened, synchronize, reopened]
     branches:
       [dev]
-    paths:
-      [services/nats-server/*]
 jobs:
   validate:
-    name: Validate nats-server
+    name: Validate strauss
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Docker Compose strauss-nats-server
+      - name: Create Docker Network
+        run: sudo docker network create nats
+
+      - name: Docker Compose strauss
         uses: isbang/compose-action@v1.4.1
         with:
-          compose-file: services/nats-server/nats-server.yml
+          compose-file: system/strauss-compose.yml
