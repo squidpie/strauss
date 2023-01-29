@@ -7,7 +7,7 @@ run-name: ${{ github.actor }} is deploying strauss
 on:
   push:
     branches:
-      [prod]
+      - "prod"
   workflow_dispatch:
 
   deployment:
