@@ -17,28 +17,52 @@ jobs:
     name: Validate strauss
     runs-on: ubuntu-latest
 
+    env:
+      STRAUSS_ROOT_DIR: ${{ github.workspace }}
+      STRAUSS_BUILD_DIR: ${{ github.workspace }}/target/debug
+      
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Create Docker Network
-        run: sudo docker network create nats
-
-      - name: Docker Compose strauss
-        uses: isbang/compose-action@v1.4.1
         with:
-          compose-file: system/strauss-compose.yml
+          fetch-depth: 0
 
+      - name: Setup GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.15
+        with:
+          versionSpec: '5.x'
+
+      - name: Resolve Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.15
+      
       - name: Setup Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4.5.0
 
-      - name: Cache Kafka Testing Environment
+      - name: Setup Rust Env
+        uses: actions-rs/toolchain@v1.0.6
+        with:
+          toolchain: stable
+
+      - name: Build Services
+        run: cargo build
+
+      - name: Unit Test Services
+        run: cargo test
+      
+      - name: Build Docker Images
+        run: docker compose build
+        
+      - name: Compose Strauss
+        run: docker compose up -d
+ 
+      - name: Restore Kafka Testing Environment
         id: cache-virtualenv
         uses: syphar/restore-virtualenv@v1
         with:
           requirement_files: tests/kafka/requirements.txt
 
-      - name: Restore Kafka Testing Environment
+      - name: Download Kafka Testing Environment
         uses: syphar/restore-pip-download-cache@v1
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
@@ -47,4 +71,4 @@ jobs:
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
       - name: Run Kafka Integration Test
-        run: ./tests/kafka/run.py tests/kafka/config.ini
+        run: cd tests/kafka/ && ./run.py config.ini

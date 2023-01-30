@@ -1,0 +1,10 @@
+# strauss-compose.override.yml
+# Copyright (C) 2023
+# Squidpie
+
+version: "3.5"
+services:
+  chat:
+    build:
+      context: ${STRAUSS_BUILD_DIR}
+      dockerfile: ${STRAUSS_ROOT_DIR}/services/chat/Dockerfile
