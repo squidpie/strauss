@@ -24,12 +24,19 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.15
+        with:
+          versionSpec: '5.6.6'
+
+      - name: Resolve Version
+        uses: gittools/actions/gitversion/execute@v0.9.15
       
       - name: Setup Python
         uses: actions/setup-python@v4.5.0
-
-      #- name: Setup Strauss Env
-      #  run: source strauss.gitaction.env.sh
 
       - name: Setup Rust Env
         uses: actions-rs/toolchain@v1.0.6
@@ -44,9 +51,13 @@ jobs:
       
       - name: Build Docker Images
         run: docker compose build
+        env:
+          GitVersion_SemVer: $GITVERSION_SEMVER
 
       - name: Compose Strauss
         run: docker compose up -d
+        env:
+          GitVersion_SemVer: $GITVERSION_SEMVER
 
       - name: Cache Kafka Testing Environment
         id: cache-virtualenv
