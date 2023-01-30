@@ -38,10 +38,10 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4.5.0
 
-      - name: Start ssh-agent
-        uses: webfactory/ssh-agent@v0.7.0
-        with:
-          ssh-private-key: ${{ secrets.DEPLOY_PRIV_KEY }}
+      #- name: Start ssh-agent
+      #  uses: webfactory/ssh-agent@v0.7.0
+      #  with:
+      #    ssh-private-key: ${{ secrets.DEPLOY_PRIV_KEY }}
 
       - name: Setup Rust
         uses: actions-rs/toolchain@v1.0.6
@@ -73,7 +73,7 @@ jobs:
         uses: Burnett01/rsync-deployments@5.2.1
         with:
           path: packaging/strauss-${{ steps.gitversion.outputs.semVer }}/strauss-${{ steps.gitversion.outputs.semVer }}.tar.gz
-          remote_path: /tmp/
+          remote_path: ${{ secrets.DEPLOY_PATH }}
           remote_host: ${{ secrets.DEPLOY_HOST }}
           remote_user: ${{ secrets.DEPLOY_USER }}
           remote_key: ${{ secrets.DEPLOY_PRIV_KEY }}
@@ -86,5 +86,5 @@ jobs:
           key: ${{ secrets.DEPLOY_PRIV_KEY }}
           command: |
             cd ${{ secrets.DEPLOY_PATH }} &&\
-            tar zxf /tmp/strauss-${GitVersion_SemVer}.tar.gz --strip-components=1 . &&\
+            tar zxf strauss-${GitVersion_SemVer}.tar.gz --strip-components=1 . &&\
             ./deploy.sh
