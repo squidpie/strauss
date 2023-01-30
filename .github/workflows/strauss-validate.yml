@@ -21,14 +21,18 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
       
-      - name: Setup Env
+      - name: Setup Python
         uses: actions/setup-python@v4.5.0
+
+      - name: Setup Strauss Env
         run: source strauss.env
 
-      - name: Build Services
+      - name: Setup Rust Env
         uses: actions-rs/toolchain@v1.0.6
         with:
           toolchain: stable
+
+      - name: Build Services
         run: cargo build
 
       - name: Unit Test Services
