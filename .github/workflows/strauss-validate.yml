@@ -31,9 +31,6 @@ jobs:
       #- name: Setup Strauss Env
       #  run: source strauss.gitaction.env.sh
 
-      - name: Map Strauss Env
-        uses:
-
       - name: Setup Rust Env
         uses: actions-rs/toolchain@v1.0.6
         with:
