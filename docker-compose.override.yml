@@ -1,3 +1,7 @@
+# strauss-compose.override.yml
+# Copyright (C) 2023
+# Squidpie
+
 version: "3.5"
 services:
   chat:

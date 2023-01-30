@@ -1,3 +1,9 @@
+/*
+main.rs
+Copyright (C) 2023
+Squidpie
+*/
+
 fn main() {
     println!("Hello, world!");
 }

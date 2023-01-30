@@ -1,4 +1,8 @@
 #!/bin/bash
+# package.sh
+# Copyright (C) 2023
+# Squidpie
+
 RelName="strauss-${GitVersion_SemVer}"
 RelPath="packaging/${RelName}"
 
