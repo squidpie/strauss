@@ -16,15 +16,27 @@ jobs:
     name: Deploy strauss
     runs-on: ubuntu-latest
   
+    env:
+      STRAUSS_ROOT_DIR: ${{ github.workspace }}
+      STRAUSS_BUILD_DIR: ${{ github.workspace }}/target/release
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-  
+        with:
+          fetch-depth: 0
+
+      - name: Setup GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.15
+        with:
+          versionSpec: '5.x'
+
+      - name: Resolve Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.15
+
       - name: Setup Python
         uses: actions/setup-python@v4.5.0
-
-      - name: Setup Strauss Env
-        run: source strauss.gitaction.env.sh && source strauss.prod.env.sh
 
       - name: Start ssh-agent
         uses: webfactory/ssh-agent@v0.7.0
