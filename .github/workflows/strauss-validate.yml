@@ -20,17 +20,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      
+      - name: Setup Env
+        uses: actions/setup-python@v4.5.0
+        run: source strauss.env
 
-      - name: Create Docker Network
-        run: sudo docker network create nats
-
-      - name: Docker Compose strauss
-        uses: isbang/compose-action@v1.4.1
+      - name: Build Services
+        uses: actions-rs/toolchain@v1.0.6
         with:
-          compose-file: system/strauss-compose.yml
+          toolchain: stable
+        run: cargo build
 
-      - name: Setup Python
-        uses: actions/setup-python@v2
+      - name: Unit Test Services
+        run: cargo test
+      
+      - name: Build Docker Images
+        run: docker compose build
+
+      - name: Compose Strauss
+        run: docker compose up -d
 
       - name: Cache Kafka Testing Environment
         id: cache-virtualenv
@@ -47,4 +55,4 @@ jobs:
         if: steps.cache-virtualenv.outputs.cache-hit != 'true'
 
       - name: Run Kafka Integration Test
-        run: ./tests/kafka/run.py tests/kafka/config.ini
+        run: cd tests/kafka/ && ./run.py config.ini

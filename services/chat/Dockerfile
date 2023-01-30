@@ -1,5 +1,5 @@
 FROM debian:bullseye-slim
-WORKDIR /strauss-chat
-COPY target/chat .
-CMD chat
+WORKDIR /strauss
+COPY chat .
+CMD ./chat
 EXPOSE 9092

@@ -1,0 +1,1 @@
+export STRAUSS_BUILD_DIR=${STRAUSS_ROOT_DIR}/target/release
