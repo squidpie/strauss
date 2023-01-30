@@ -17,6 +17,10 @@ jobs:
     name: Validate strauss
     runs-on: ubuntu-latest
 
+    env:
+      STRAUSS_ROOT_DIR: ${{ github.workspace }}
+      STRAUSS_BUILD_DIR: ${{ github.workspace }}/target/debug
+      
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -24,8 +28,11 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v4.5.0
 
-      - name: Setup Strauss Env
-        run: source strauss.gitaction.env.sh
+      #- name: Setup Strauss Env
+      #  run: source strauss.gitaction.env.sh
+
+      - name: Map Strauss Env
+        uses:
 
       - name: Setup Rust Env
         uses: actions-rs/toolchain@v1.0.6
