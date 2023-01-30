@@ -16,23 +16,75 @@ jobs:
     name: Deploy strauss
     runs-on: ubuntu-latest
   
+    env:
+      STRAUSS_ROOT_DIR: ${{ github.workspace }}
+      STRAUSS_BUILD_DIR: ${{ github.workspace }}/target/release
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-  
+        with:
+          fetch-depth: 0
+
+      - name: Setup GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.15
+        with:
+          versionSpec: '5.x'
+
+      - name: Resolve Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.15
+
+      - name: Setup Python
+        uses: actions/setup-python@v4.5.0
+
+      #- name: Start ssh-agent
+      #  uses: webfactory/ssh-agent@v0.7.0
+      #  with:
+      #    ssh-private-key: ${{ secrets.DEPLOY_PRIV_KEY }}
+
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1.0.6
+        with:
+          toolchain: stable
+
+      - name: Build Services
+        run: cargo build -r --all-features
+
+      - name: Build Docker Images
+        run: docker compose build
+
+      - name: Create Package
+        run: ./scripts/package.sh
+
+      - name: Login DockerHub
+        uses: docker/login-action@v2.1.0
+        with:
+          username: ${{ secrets.DOCKERHUB_USER }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Publish Service Images
+        run: |
+          docker tag strauss/chat:${GitVersion_SemVer} \
+            ${{ secrets.DOCKERHUB_USER }}/strauss-chat:${GitVersion_SemVer}
+          docker push ${{ secrets.DOCKERHUB_USER }}/strauss-chat:${GitVersion_SemVer}
+
       - name: Rsync Deployment Files
         uses: Burnett01/rsync-deployments@5.2.1
         with:
-          path: system/strauss-compose.yml
-          remote_path: ${{ secrets.DEPLOY_PATH }}/
+          path: packaging/strauss-${{ steps.gitversion.outputs.semVer }}/strauss-${{ steps.gitversion.outputs.semVer }}.tar.gz
+          remote_path: ${{ secrets.DEPLOY_PATH }}
           remote_host: ${{ secrets.DEPLOY_HOST }}
           remote_user: ${{ secrets.DEPLOY_USER }}
           remote_key: ${{ secrets.DEPLOY_PRIV_KEY }}
-  
-      - name: Docker Compose Deployment
+
+      - name: Deploy Strauss
         uses: fifsky/ssh-action@v0.0.6
         with:
           host: ${{ secrets.DEPLOY_HOST }}
           user: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_PRIV_KEY }}
-          command: docker-compose -f ${{ secrets.DEPLOY_PATH }}/strauss-compose.yml up -d
+          command: |
+            cd ${{ secrets.DEPLOY_PATH }} &&\
+            tar zxf strauss-${{ steps.gitversion.outputs.semVer }}.tar.gz --strip-components=1 &&\
+            ./deploy.sh

@@ -1,0 +1,8 @@
+# strauss-compose.prod.yml
+# Copyright (C) 2023
+# Squidpie
+
+version: "3.5"
+services:
+  chat:
+    image: squidpie/strauss-chat:${GITVERSION_SEMVER}
