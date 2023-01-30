@@ -15,7 +15,7 @@ cp docker-compose.yml ${RelPath}/
 cp docker-compose.prod.yml ${RelPath}/
 
 # Create Deployment Environment
-echo "GitVersion_SemVer=${GitVersion_SemVer}" > ${RelPath}/.env
+echo "GITVERSION_SEMVER=${GITVERSION_SEMVER}" > ${RelPath}/.env
 
 # Copy deploy script
 cp scripts/deploy.sh ${RelPath}/
