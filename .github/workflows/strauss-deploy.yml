@@ -86,5 +86,5 @@ jobs:
           key: ${{ secrets.DEPLOY_PRIV_KEY }}
           command: |
             cd ${{ secrets.DEPLOY_PATH }} &&\
-            tar zxf strauss-${{ steps.gitversion.outputs.semVer }}.tar.gz --strip-components=1 . &&\
+            tar zxf strauss-${{ steps.gitversion.outputs.semVer }}.tar.gz --strip-components=1 &&\
             ./deploy.sh
