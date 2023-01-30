@@ -52,7 +52,7 @@ jobs:
         run: cargo build -r --all-features
 
       - name: Build Docker Images
-        run: docker compose build -f docker-compose.yml -f docker-compose.prod.yml
+        run: docker compose build
 
       - name: Create Package
         run: ./scripts/package.sh
