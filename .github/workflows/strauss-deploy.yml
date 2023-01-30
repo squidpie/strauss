@@ -69,10 +69,14 @@ jobs:
             ${{ secrets.DOCKERHUB_USER }}/strauss-chat:${GitVersion_SemVer}
           docker push ${{ secrets.DOCKERHUB_USER }}/strauss-chat:${GitVersion_SemVer}
 
-      - name: Upload Package
-        run: cat packaging/strauss-${GitVersion_SemVer}/strauss-${GitVersion_SemVer}.tar.gz | \
-             ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} \
-             "tar zxf - -C ${{ secrets.DEPLOY_PATH }}/ --strip-components=1"
+      - name: Rsync Deployment Files
+        uses: Burnett01/rsync-deployments@5.2.1
+        with:
+          path: packaging/strauss-${GitVersion_SemVer}/strauss-${GitVersion_SemVer}.tar.gz
+          remote_path: /tmp/
+          remote_host: ${{ secrets.DEPLOY_HOST }}
+          remote_user: ${{ secrets.DEPLOY_USER }}
+          remote_key: ${{ secrets.DEPLOY_PRIV_KEY }}
 
       - name: Deploy Strauss
         uses: fifsky/ssh-action@v0.0.6
@@ -80,4 +84,7 @@ jobs:
           host: ${{ secrets.DEPLOY_HOST }}
           user: ${{ secrets.DEPLOY_USER }}
           key: ${{ secrets.DEPLOY_PRIV_KEY }}
-          command: cd ${{ secrets.DEPLOY_PATH }} && ./deploy.sh
+          command: |
+            cd ${{ secrets.DEPLOY_PATH }} &&\
+            tar zxf /tmp/strauss-${GitVersion_SemVer}.tar.gz --strip-components=1 . &&\
+            ./deploy.sh
