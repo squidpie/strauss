@@ -52,13 +52,13 @@ jobs:
       
       - name: Build Docker Images
         run: docker compose build
-        env:
-          GitVersion_SemVer: ${{ steps.gitversion.outputs.semVer }}
+        #env:
+        #  GitVersion_SemVer: ${{ steps.gitversion.outputs.semVer }}
 
       - name: Compose Strauss
         run: docker compose up -d
-        env:
-          GitVersion_SemVer: ${{ steps.gitversion.outputs.semVer }}
+        #env:
+        #  GitVersion_SemVer: ${{ steps.gitversion.outputs.semVer }}
 
       - name: Cache Kafka Testing Environment
         id: cache-virtualenv

@@ -30,7 +30,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
   chat:
-    image: strauss/chat:${GitVersion_SemVer}
+    image: strauss/chat:${GITVERSION_SEMVER}
     container_name: chat
     depends_on:
       - broker

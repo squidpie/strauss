@@ -5,4 +5,4 @@
 version: "3.5"
 services:
   chat:
-    image: squidpie/strauss-chat:${GitVersion_SemVer}
+    image: squidpie/strauss-chat:${GITVERSION_SEMVER}
