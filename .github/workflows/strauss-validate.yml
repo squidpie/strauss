@@ -25,7 +25,7 @@ jobs:
         uses: actions/setup-python@v4.5.0
 
       - name: Setup Strauss Env
-        run: source strauss.env
+        run: source strauss.gitaction.env.sh
 
       - name: Setup Rust Env
         uses: actions-rs/toolchain@v1.0.6

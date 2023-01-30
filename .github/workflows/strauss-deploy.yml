@@ -24,7 +24,7 @@ jobs:
         uses: actions/setup-python@v4.5.0
 
       - name: Setup Strauss Env
-        run: source strauss.env && source strauss.prod.env
+        run: source strauss.gitaction.env.sh && source strauss.prod.env.sh
 
       - name: Start ssh-agent
         uses: webfactory/ssh-agent@v0.7.0
