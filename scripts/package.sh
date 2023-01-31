@@ -3,7 +3,7 @@
 # Copyright (C) 2023
 # Squidpie
 
-RelName="strauss-${GitVersion_SemVer}"
+RelName="strauss-${GITVERSION_SEMVER}"
 RelPath="packaging/${RelName}"
 
 # Setup output dir
