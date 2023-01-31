@@ -15,10 +15,10 @@ jobs:
     name: Validate Commit Message
     runs-on: ubuntu-latest
 
-  steps:
-    - name: Check for semver attribute
-      uses: GsActions/commit-message-checker@v2.0.0
-      with:
-        pattern: '\+semver: [patch|fix|minor|feature|major|breaking]'
-        error: 'Commits from side branches to dev must include a +semver: [bump_value] in the final commit'
-  
+    steps:
+      - name: Check for semver attribute
+        uses: GsActions/commit-message-checker@v2.0.0
+        with:
+          pattern: '\+semver: [patch|fix|minor|feature|major|breaking]'
+          error: 'Commits from side branches to dev must include a +semver: [bump_value] in the final commit'
+    
