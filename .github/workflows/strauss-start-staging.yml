@@ -48,11 +48,9 @@ jobs:
         if: ${{ steps.gitversionlast.outputs.majorMinorPatch }} != ${{ steps.gitversioncurrent.outputs.majorMinorPatch }}
         run: |
           /usr/bin/git config --global credential.helper store
-          /usr/bin/git config --global --replace-all url.https://github.com/.insteadOf ssh://git@github.com/
-          /usr/bin/git config --global --add url.https://github.com/.insteadOf git@github.com:
           /usr/bin/git config --global user.name "squidpie"
           /usr/bin/git config --global user.email "squidpie_meowface@pm.me"
-          /usr/bin/git remote set-url origin https://${{ secrets.GIT_TOKEN }}@github.com/squidpie/strauss.git/
+          /usr/bin/git remote set-url origin https://${{ secrets.GIT_TOKEN }}@github.com/squidpie/strauss.git
           /usr/bin/git checkout prod
           /usr/bin/git checkout -b stage/${{ steps.gitversioncurrent.outputs.semVer }}
           /usr/bin/git pull --ff-only origin dev
