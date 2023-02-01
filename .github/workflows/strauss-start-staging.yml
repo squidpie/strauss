@@ -24,6 +24,10 @@ jobs:
         with:
           versionSpec: '5.x'
 
+      - name: Resolve Version
+        id: gitversioncurrent
+        uses: gittools/actions/gitversion/execute@v0.9.15
+
       - name: Step Back One Commit
         run: git checkout HEAD~1
 
@@ -31,20 +35,18 @@ jobs:
         id: gitversionlast
         uses: gittools/actions/gitversion/execute@v0.9.15
 
-      - name: Store Version
-        run: echo "LAST_SEMVAR=${{ steps.gitversionlast.outputs.semVer }}" >> $GITHUB_ENV
+      #- name: Store Version
+      #  run: echo "LAST_SEMVAR=${{ steps.gitversionlast.outputs.semVer }}" >> $GITHUB_ENV
 
-      - name: Step to Head
-        run: git checkout HEAD
-
-      - name: Resolve Version
-        id: gitversioncurrent
-        uses: gittools/actions/gitversion/execute@v0.9.15
-
-      - name: Start Staging Process
+      - name: Stage Prod Branch
         if: ${{ steps.gitversionlast.outputs.semVer }} != ${{ steps.gitversioncurrent.outputs.semVer }}
         run: |
           git checkout prod
           git checkout -b stage/${{ steps.gitversioncurrent.outputs.semVer }}
           git pull --ff-only origin dev
-          git push origin stage/${{ steps.gitversioncurrent.outputs.semVer }}
+
+      - name: Start Staging Process
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: stage/${{ steps.gitversioncurrent.outputs.semVer }}
