@@ -38,13 +38,17 @@ jobs:
       #- name: Store Version
       #  run: echo "LAST_SEMVAR=${{ steps.gitversionlast.outputs.semVer }}" >> $GITHUB_ENV
 
+      - name: setup-git-credentials
+        uses: de-vri-es/setup-git-credentials@v2.0.10
+        with:
+          credentials: ${{ secrets.GIT_TOKEN }}
+      
       - name: Stage Prod Branch
         if: ${{ steps.gitversionlast.outputs.majorMinorPatch }} != ${{ steps.gitversioncurrent.outputs.majorMinorPatch }}
         run: |
           git checkout prod
           git checkout -b stage/${{ steps.gitversioncurrent.outputs.semVer }}
           git pull --ff-only origin dev
-          git config --global user.name ${{ github.actor }}
           git push origin stage/${{ steps.gitversioncurrent.outputs.semVer }}
 
       #- name: Start Staging Process
