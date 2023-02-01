@@ -36,21 +36,18 @@ jobs:
         id: gitversionlast
         uses: gittools/actions/gitversion/execute@v0.9.15
 
-      #- name: Store Version
-      #  run: echo "LAST_SEMVAR=${{ steps.gitversionlast.outputs.semVer }}" >> $GITHUB_ENV
+      - name: setup-git-credentials
+        uses: de-vri-es/setup-git-credentials@v2.0.10
+        with:
+          credentials: ${{ secrets.GIT_TOKEN }}
 
-      #- name: setup-git-credentials
-      #  uses: de-vri-es/setup-git-credentials@v2.0.10
-      #  with:
-      #    credentials: ${{ secrets.GIT_TOKEN }}
-      
+      - name: Test Step
+        if: ${{ steps.gitversionlast.outputs.majorMinorPatch }} != ${{ steps.gitversioncurrent.outputs.majorMinorPatch }}
+        run: echo "${{ steps.gitversionlast.outputs.majorMinorPatch }}\n${{ steps.gitversioncurrent.outputs.majorMinorPatch }}"
+
       - name: Stage Prod Branch
         if: ${{ steps.gitversionlast.outputs.majorMinorPatch }} != ${{ steps.gitversioncurrent.outputs.majorMinorPatch }}
         run: |
-          /usr/bin/git config --global credential.helper store
-          /usr/bin/git config --global user.name "squidpie"
-          /usr/bin/git config --global user.email "squidpie_meowface@pm.me"
-          /usr/bin/git remote set-url origin https://${{ secrets.GIT_TOKEN }}@github.com/squidpie/strauss.git
           /usr/bin/git checkout prod
           /usr/bin/git checkout -b stage/${{ steps.gitversioncurrent.outputs.semVer }}
           /usr/bin/git pull --ff-only origin dev

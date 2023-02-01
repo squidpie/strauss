@@ -43,10 +43,6 @@ jobs:
 
       - name: Merge to Prod
         run: |
-          /usr/bin/git config --global credential.helper store
-          /usr/bin/git config --global user.name "squidpie"
-          /usr/bin/git config --global user.email "squidpie_meowface@pm.me"
-          /usr/bin/git remote set-url origin https://${{ secrets.GIT_TOKEN }}@github.com/squidpie/strauss.git
           /usr/bin/git checkout prod
           /usr/bin/git pull --ff-only origin ${{ github.ref }}
           /usr/bin/git tag ${{ steps.gitversion.outputs.semVer }} -m "auto-tagged by staging"
