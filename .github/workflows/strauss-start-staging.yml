@@ -46,5 +46,6 @@ jobs:
         run: |
           /usr/bin/git checkout prod
           /usr/bin/git checkout -b stage/${{ steps.gitversioncurrent.outputs.semVer }}
+          /usr/bin/git push origin stage/${{ steps.gitversioncurrent.outputs.semVer }}
           /usr/bin/git pull --ff-only origin dev
           /usr/bin/git push origin stage/${{ steps.gitversioncurrent.outputs.semVer }}
