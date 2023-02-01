@@ -1,4 +1,4 @@
-# strauss-compose.yml
+# docker-compose.yml
 # Copyright (C) 2023
 # Squidpie
 
@@ -30,7 +30,7 @@ services:
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
 
   chat:
-    image: strauss/chat:${GITVERSION_SEMVER}
+    image: strauss/chat:${STRAUSS_CHAT_PKG_VERSION}
     container_name: chat
     depends_on:
       - broker

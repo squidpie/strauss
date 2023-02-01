@@ -36,8 +36,11 @@ jobs:
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.15
       
-      - name: Setup Python
-        uses: actions/setup-python@v4.5.0
+      - name: Setup Ruby
+        uses: actions/setup-ruby@v1
+
+      - name: Setup Strauss Env
+        run: ./scripts/gen-gha-env.sh
 
       - name: Setup Rust Env
         uses: actions-rs/toolchain@v1.0.6
@@ -56,6 +59,9 @@ jobs:
       - name: Compose Strauss
         run: docker compose up -d
  
+      - name: Setup Python
+        uses: actions/setup-python@v4.5.0
+      
       - name: Restore Kafka Testing Environment
         id: cache-virtualenv
         uses: syphar/restore-virtualenv@v1
