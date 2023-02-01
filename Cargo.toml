@@ -1,2 +1,8 @@
 [workspace]
 members = ["services/chat"]
+default-members = ["services/chat"]
+
+[workspace.package]
+authors = ["Squidpie"]
+edition = "2021"
+
