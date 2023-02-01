@@ -10,3 +10,4 @@ branches:
   production:
     regex: ^prod$
     tag: alpha
+    source-branches: ['develop']
