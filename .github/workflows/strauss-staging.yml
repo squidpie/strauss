@@ -50,6 +50,6 @@ jobs:
       - name: Tag and Push
         run: |
           /usr/bin/git tag rc-${{ steps.gitversion.outputs.semVer }} -m "auto-tagged by staging"
-          /usr/bin/git git push origin rc-${{ steps.gitversion.outputs.semVer }}
+          /usr/bin/git push origin rc-${{ steps.gitversion.outputs.semVer }}
           /usr/bin/git push origin prod
           /usr/bin/git push origin --delete ${{ github.ref }}
