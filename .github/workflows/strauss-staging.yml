@@ -24,21 +24,36 @@ jobs:
 
       - name: Checkout
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.15
+        with:
+          versionSpec: '5.x'
+
+      - name: Resolve Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.15
 
       - name: Merge to Prod
         run: |
           git checkout prod
           git pull --ff-only origin ${{ github.ref }}
+          git config --global user.name ${{ github.actor }}
+          git tag ${{ steps.gitversion.outputs.semVer }} -m "auto-tagged by staging"
+          git push --atomic origin prod ${{ steps.gitversion.outputs.semVer }}
+          git push origin --delete ${{ github.ref }}
 
-      - name: Push to Prod
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: prod
-
-      - name: Delete stage
-        uses: dawidd6/action-delete-branch@v3.1.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+      #- name: Push to Prod
+      #  uses: ad-m/github-push-action@v0.6.0
+      #  with:
+      #    github_token: ${{ secrets.GITHUB_TOKEN }}
+      #    branch: prod
+#
+      #- name: Delete stage
+      #  uses: dawidd6/action-delete-branch@v3.1.0
+      #  with:
+      #    github_token: ${{ secrets.GITHUB_TOKEN }}
+      #    branch: ${{ github.ref }}
 
