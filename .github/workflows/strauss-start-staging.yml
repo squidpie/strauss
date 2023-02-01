@@ -39,14 +39,16 @@ jobs:
       #  run: echo "LAST_SEMVAR=${{ steps.gitversionlast.outputs.semVer }}" >> $GITHUB_ENV
 
       - name: Stage Prod Branch
-        if: ${{ steps.gitversionlast.outputs.semVer }} != ${{ steps.gitversioncurrent.outputs.semVer }}
+        if: ${{ steps.gitversionlast.outputs.majorMinorPatch }} != ${{ steps.gitversioncurrent.outputs.majorMinorPatch }}
         run: |
           git checkout prod
           git checkout -b stage/${{ steps.gitversioncurrent.outputs.semVer }}
           git pull --ff-only origin dev
+          git config --global user.name ${{ github.actor }}
+          git push origin stage/${{ steps.gitversioncurrent.outputs.semVer }}
 
-      - name: Start Staging Process
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: stage/${{ steps.gitversioncurrent.outputs.semVer }}
+      #- name: Start Staging Process
+      #  uses: ad-m/github-push-action@v0.6.0
+      #  with:
+      #    github_token: ${{ secrets.GITHUB_TOKEN }}
+      #    branch: stage/${{ steps.gitversioncurrent.outputs.semVer }}
