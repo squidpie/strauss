@@ -1,2 +1,2 @@
 #!/bin/bash
-echo `services/chat/env.rb` >> .env
+echo `services/chat/env.rb` > .env
