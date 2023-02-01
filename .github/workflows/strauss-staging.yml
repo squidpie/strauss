@@ -33,22 +33,23 @@ jobs:
         with:
           versionSpec: '5.x'
 
-      - name: Checkout Prod
-        run: /usr/bin/git checkout prod
-
-      - name: Resolve Version
-        id: gitversion
-        uses: gittools/actions/gitversion/execute@v0.9.15
-
       - name: Configure git credentials
         uses: OleksiyRudenko/gha-git-credentials@v2.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Merge to Prod
+      - name: Fast-Forward Prod
         run: |
+          /usr/bin/git checkout prod
           /usr/bin/git pull --ff-only origin ${{ github.ref }}
-          /usr/bin/git tag rc-${{ steps.gitversion.outputs.majorMinorPatch }} -m "auto-tagged by staging"
-          /usr/bin/git push --follow-tags origin prod
+
+      - name: Resolve Version
+        id: gitversion
+        uses: gittools/actions/gitversion/execute@v0.9.15
+
+      - name: Tag and Push
+        run: |
+          /usr/bin/git tag rc-${{ steps.gitversion.outputs.semVer }} -m "auto-tagged by staging"
+          /usr/bin/git git push origin rc-${{ steps.gitversion.outputs.semVer }}
           /usr/bin/git push origin prod
           /usr/bin/git push origin --delete ${{ github.ref }}
