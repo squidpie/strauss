@@ -39,7 +39,7 @@ jobs:
         uses: actions/setup-ruby@v1
 
       - name: Setup Strauss Env
-        run: ./scripts/gen-gha-env.sh
+        run: ./scripts/gen-gha-env.sh && cat .env >> $GITHUB_ENV
       
       - name: Setup Rust
         uses: actions-rs/toolchain@v1.0.6
@@ -61,11 +61,19 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USER }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Publish Service Images
+      - name: Check for existing Chat Service Image
+        id: checktagexist
+        continue-on-error: true
         run: |
-          docker tag strauss/chat:${GitVersion_SemVer} \
-            ${{ secrets.DOCKERHUB_USER }}/strauss-chat:${GitVersion_SemVer}
-          docker push ${{ secrets.DOCKERHUB_USER }}/strauss-chat:${GitVersion_SemVer}
+          docker manifest inspect \
+          ${{ secrets.DOCKERHUB_USER }}/strauss-chat:${{ env.STRAUSS_CHAT_PKG_VERSION }} > /dev/null
+
+      - name: Publish Chat Service Image
+        if: steps.checktagexist.outcome != 'sucess'
+        run: |
+          docker tag strauss/chat:${{ env.STRAUSS_CHAT_PKG_VERSION }} \
+            ${{ secrets.DOCKERHUB_USER }}/strauss-chat:${{ env.STRAUSS_CHAT_PKG_VERSION }}
+          docker push ${{ secrets.DOCKERHUB_USER }}/strauss-chat:${{ env.STRAUSS_CHAT_PKG_VERSION }}
 
       - name: Rsync Deployment Files
         uses: Burnett01/rsync-deployments@5.2.1
