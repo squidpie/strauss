@@ -1,0 +1,50 @@
+# strauss-start-staging.yml
+# Copyright (C) 2023
+# Squidpie
+
+name: strauss-start-staging
+run-name: ${{ github.actor }} is creating a staging branch
+on:
+  push:
+    branches:
+      [dev]
+
+jobs:
+  staging:
+    name: strauss-start-staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Setup GitVersion
+        uses: gittools/actions/gitversion/setup@v0.9.15
+        with:
+          versionSpec: '5.x'
+
+      - name: Step Back One Commit
+        run: git checkout HEAD~1
+
+      - name: Resolve Version
+        id: gitversionlast
+        uses: gittools/actions/gitversion/execute@v0.9.15
+
+      - name: Store Version
+        run: echo "LAST_SEMVAR=${{ steps.gitversionlast.outputs.semVer }}" >> $GITHUB_ENV
+
+      - name: Step to Head
+        run: git checkout HEAD
+
+      - name: Resolve Version
+        id: gitversioncurrent
+        uses: gittools/actions/gitversion/execute@v0.9.15
+
+      - name: Start Staging Process
+        if: ${{ steps.gitversionlast.outputs.semVer }} != ${{ steps.gitversioncurrent.outputs.semVer }}
+        run: |
+          git checkout prod
+          git checkout -b stage/${{ steps.gitversioncurrent.outputs.semVer }}
+          git pull --ff-only origin dev
+          git push origin stage/${{ steps.gitversioncurrent.outputs.semVer }}
