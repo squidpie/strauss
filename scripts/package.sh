@@ -15,7 +15,8 @@ cp docker-compose.yml ${RelPath}/
 cp docker-compose.prod.yml ${RelPath}/
 
 # Create Deployment Environment
-echo `services/chat/env.rb` > ${RelPath}/.env
+./scripts/gen-prod-env.sh
+cp .env ${RelPath}/
 
 # Copy deploy script
 cp scripts/deploy.sh ${RelPath}/
