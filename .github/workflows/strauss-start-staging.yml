@@ -41,20 +41,10 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Test Step
-        if: ${{ steps.gitversionlast.outputs.majorMinorPatch  != steps.gitversioncurrent.outputs.majorMinorPatch }}
-        run: echo "${{ steps.gitversionlast.outputs.majorMinorPatch }} - ${{ steps.gitversioncurrent.outputs.majorMinorPatch }}"
-
       - name: Stage Prod Branch
-        if: ${{ steps.gitversionlast.outputs.majorMinorPatch != steps.gitversioncurrent.outputs.majorMinorPatch }}
+        if: steps.gitversionlast.outputs.majorMinorPatch != steps.gitversioncurrent.outputs.majorMinorPatch
         run: |
           /usr/bin/git checkout prod
           /usr/bin/git checkout -b stage/${{ steps.gitversioncurrent.outputs.semVer }}
           /usr/bin/git pull --ff-only origin dev
           /usr/bin/git push origin stage/${{ steps.gitversioncurrent.outputs.semVer }}
-
-      #- name: Start Staging Process
-      #  uses: ad-m/github-push-action@v0.6.0
-      #  with:
-      #    github_token: ${{ secrets.GITHUB_TOKEN }}
-      #    branch: stage/${{ steps.gitversioncurrent.outputs.semVer }}
