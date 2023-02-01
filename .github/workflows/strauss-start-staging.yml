@@ -36,10 +36,10 @@ jobs:
         id: gitversionlast
         uses: gittools/actions/gitversion/execute@v0.9.15
 
-      - name: setup-git-credentials
-        uses: de-vri-es/setup-git-credentials@v2.0.10
+      - name: Configure git credentials
+        uses: OleksiyRudenko/gha-git-credentials@v2.1.1
         with:
-          credentials: ${{ secrets.GIT_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Test Step
         if: ${{ steps.gitversionlast.outputs.majorMinorPatch }} != ${{ steps.gitversioncurrent.outputs.majorMinorPatch }}
