@@ -7,7 +7,7 @@ run-name: ${{ github.actor }} is validating strauss
 on:
   push:
     branches:
-      [dev]
+      [dev, stage/**]
   pull_request:
     types: [assigned, opened, synchronize, reopened]
     branches:

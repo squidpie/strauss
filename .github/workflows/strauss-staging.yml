@@ -1,0 +1,44 @@
+# strauss-staging.yml
+# Copyright (C) 2023
+# Squidpie
+
+name: strauss-staging
+run-name: ${{ github.actor }} is staging Strauss for merge into prod
+on:
+  push:
+    branches:
+      [stage/**]
+
+jobs:
+  staging:
+    name: strauss-staging
+    runs-on: ubuntu-latest
+    steps:
+      - name: Wait for validation
+        uses: lewagon/wait-on-check-action@v1.2.0
+        with:
+          ref: ${{ github.ref }}
+          check-name: 'Validate strauss'
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          wait-interval: 10
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Merge to Prod
+        run: |
+          git checkout prod
+          git pull --ff-only origin ${{ github.ref }}
+
+      - name: Push to Prod
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: prod
+
+      - name: Delete stage
+        uses: dawidd6/action-delete-branch@v3.1.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: ${{ github.ref }}
+
