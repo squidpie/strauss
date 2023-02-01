@@ -29,16 +29,19 @@ jobs:
         run: |
           git checkout prod
           git pull --ff-only origin ${{ github.ref }}
+          git config --global user.name ${{ github.actor }}
+          git push origin prod
+          git push origin --delete ${{ github.ref }}
 
-      - name: Push to Prod
-        uses: ad-m/github-push-action@v0.6.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: prod
-
-      - name: Delete stage
-        uses: dawidd6/action-delete-branch@v3.1.0
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          branch: ${{ github.ref }}
+      #- name: Push to Prod
+      #  uses: ad-m/github-push-action@v0.6.0
+      #  with:
+      #    github_token: ${{ secrets.GITHUB_TOKEN }}
+      #    branch: prod
+#
+      #- name: Delete stage
+      #  uses: dawidd6/action-delete-branch@v3.1.0
+      #  with:
+      #    github_token: ${{ secrets.GITHUB_TOKEN }}
+      #    branch: ${{ github.ref }}
 
