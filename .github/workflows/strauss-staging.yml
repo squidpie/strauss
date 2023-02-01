@@ -32,6 +32,9 @@ jobs:
         with:
           versionSpec: '5.x'
 
+      - name: Checkout Prod
+        run: /usr/bin/git checkout prod
+
       - name: Resolve Version
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.15
@@ -43,7 +46,6 @@ jobs:
 
       - name: Merge to Prod
         run: |
-          /usr/bin/git checkout prod
           /usr/bin/git pull --ff-only origin ${{ github.ref }}
           /usr/bin/git tag ${{ steps.gitversion.outputs.semVer }} -m "auto-tagged by staging"
           /usr/bin/git push --atomic origin prod ${{ steps.gitversion.outputs.semVer }}
