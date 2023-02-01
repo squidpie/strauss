@@ -7,7 +7,7 @@ run-name: ${{ github.actor }} is staging Strauss for merge into prod
 on:
   push:
     branches:
-      [stage/**]
+      [stage/*]
 
 jobs:
   staging:
@@ -48,16 +48,3 @@ jobs:
           /usr/bin/git tag ${{ steps.gitversion.outputs.semVer }} -m "auto-tagged by staging"
           /usr/bin/git push --atomic origin prod ${{ steps.gitversion.outputs.semVer }}
           /usr/bin/git push origin --delete ${{ github.ref }}
-
-      #- name: Push to Prod
-      #  uses: ad-m/github-push-action@v0.6.0
-      #  with:
-      #    github_token: ${{ secrets.GITHUB_TOKEN }}
-      #    branch: prod
-#
-      #- name: Delete stage
-      #  uses: dawidd6/action-delete-branch@v3.1.0
-      #  with:
-      #    github_token: ${{ secrets.GITHUB_TOKEN }}
-      #    branch: ${{ github.ref }}
-
