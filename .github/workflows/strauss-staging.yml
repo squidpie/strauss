@@ -43,11 +43,17 @@ jobs:
 
       - name: Merge to Prod
         run: |
-          git checkout prod
-          git pull --ff-only origin ${{ github.ref }}
-          git tag ${{ steps.gitversion.outputs.semVer }} -m "auto-tagged by staging"
-          git push --atomic origin prod ${{ steps.gitversion.outputs.semVer }}
-          git push origin --delete ${{ github.ref }}
+          /usr/bin/git config --global credential.helper store
+          /usr/bin/git config --global --replace-all url.https://github.com/.insteadOf ssh://git@github.com/
+          /usr/bin/git config --global --add url.https://github.com/.insteadOf git@github.com:
+          /usr/bin/git config --global user.name "squidpie"
+          /usr/bin/git config --global user.email "squidpie_meowface@pm.me"
+          /usr/bin/git remote set-url origin https://${{ secrets.GIT_TOKEN }}@github.com/squidpie/strauss.git/
+          /usr/bin/git checkout prod
+          /usr/bin/git pull --ff-only origin ${{ github.ref }}
+          /usr/bin/git tag ${{ steps.gitversion.outputs.semVer }} -m "auto-tagged by staging"
+          /usr/bin/git push --atomic origin prod ${{ steps.gitversion.outputs.semVer }}
+          /usr/bin/git push origin --delete ${{ github.ref }}
 
       #- name: Push to Prod
       #  uses: ad-m/github-push-action@v0.6.0
