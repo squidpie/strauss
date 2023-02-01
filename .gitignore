@@ -12,3 +12,4 @@ Cargo.lock
 # Outputs
 *.log
 packaging/
+.env

@@ -35,14 +35,12 @@ jobs:
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.15
 
-      - name: Setup Python
-        uses: actions/setup-python@v4.5.0
+      - name: Setup Ruby
+        uses: actions/setup-ruby@v1
 
-      #- name: Start ssh-agent
-      #  uses: webfactory/ssh-agent@v0.7.0
-      #  with:
-      #    ssh-private-key: ${{ secrets.DEPLOY_PRIV_KEY }}
-
+      - name: Setup Strauss Env
+        run: ./scripts/gen-gha-env.sh
+      
       - name: Setup Rust
         uses: actions-rs/toolchain@v1.0.6
         with:

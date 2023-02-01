@@ -15,7 +15,7 @@ cp docker-compose.yml ${RelPath}/
 cp docker-compose.prod.yml ${RelPath}/
 
 # Create Deployment Environment
-echo "GITVERSION_SEMVER=${GITVERSION_SEMVER}" > ${RelPath}/.env
+echo `services/chat/env.rb` > ${RelPath}/.env
 
 # Copy deploy script
 cp scripts/deploy.sh ${RelPath}/
