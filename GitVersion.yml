@@ -1,7 +1,8 @@
 mode: Mainline
 major-version-bump-message: "^(build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test)(\\([\\w\\s-]*\\))?(!:|:.*\\n\\n((.+\\n)+\\n)?BREAKING CHANGE:\\s.+)"
 minor-version-bump-message: "^(feat)(\\([\\w\\s-]*\\))?:"
-patch-version-bump-message: "^(build|chore|ci|docs|fix|perf|refactor|revert|style|test)(\\([\\w\\s-]*\\))?:"
+patch-version-bump-message: "^(build|ci|chore|fix|perf|refactor|revert|test)(\\([\\w\\s-]*\\))?:"
+no-bump-message: "^(docs|style|none)(\\([\\w\\s-]*\\))?:"
 branches:
   develop:
     regex: ^dev$
@@ -16,3 +17,11 @@ branches:
     tag: ''
     source-branches: ['develop', 'production']
     increment: None
+  patch:
+    regex: ^[build|ci|chore|fix|perf|refactor|revert|test]/
+    increment: Patch
+    source-branches: ['develop', 'production', 'feature']
+  feature:
+    regex: ^feat/
+    increment: Minor
+    source-branches: ['develop', 'production']
