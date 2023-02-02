@@ -39,11 +39,6 @@ jobs:
         with:
           versionSpec: '5.x'
 
-      - name: Fast-Forward Prod To Create Version
-        run: |
-          /usr/bin/git checkout prod
-          /usr/bin/git pull --ff-only origin ${{ github.ref }}
-
       - name: Resolve Version
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.15
