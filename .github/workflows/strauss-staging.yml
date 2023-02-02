@@ -44,9 +44,17 @@ jobs:
           /usr/bin/git checkout prod
           /usr/bin/git pull --ff-only origin ${{ github.ref }}
 
+      - name: DEBUG OUTPUT BEFORE VERSION
+        run: |
+          /usr/bin/git status
+
       - name: Resolve Version
         id: gitversion
         uses: gittools/actions/gitversion/execute@v0.9.15
+
+      - name: DEBUG OUTPUT AFTER VERSION
+        run: |
+          /usr/bin/git status
 
       - name: Tag and Push
         run: |
