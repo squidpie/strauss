@@ -11,3 +11,8 @@ branches:
     regex: ^prod$
     tag: alpha
     source-branches: ['develop']
+  staging:
+    regex: ^stage/
+    tag: ''
+    source-branches: ['develop', 'production']
+    increment: None
