@@ -71,7 +71,7 @@ jobs:
       - name: Publish Chat Service Image
         if: steps.checktagexist.outcome != 'sucess'
         run: |
-          echo ${{ steps.checktagexist.outcome }}
+          echo ${{ steps.checktagexist.outcome != 'success' }}
           docker tag strauss/chat:${{ env.STRAUSS_CHAT_PKG_VERSION }} \
             ${{ secrets.DOCKERHUB_USER }}/strauss-chat:${{ env.STRAUSS_CHAT_PKG_VERSION }}
           docker push ${{ secrets.DOCKERHUB_USER }}/strauss-chat:${{ env.STRAUSS_CHAT_PKG_VERSION }}
