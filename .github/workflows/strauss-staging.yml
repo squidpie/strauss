@@ -26,17 +26,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
+          token: ${{ secrets.STRAUSS_GIT_TOKEN }}
           fetch-depth: 0
 
       - name: Setup GitVersion
         uses: gittools/actions/gitversion/setup@v0.9.15
         with:
           versionSpec: '5.x'
-
-      - name: Configure git credentials
-        uses: OleksiyRudenko/gha-git-credentials@v2.1.1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Fast-Forward Prod
         run: |

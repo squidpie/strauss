@@ -18,6 +18,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
         with:
+          token: ${{ secrets.STRAUSS_GIT_TOKEN }}
           fetch-depth: 0
 
       - name: Setup GitVersion
@@ -36,16 +37,10 @@ jobs:
         id: gitversionlast
         uses: gittools/actions/gitversion/execute@v0.9.15
 
-      - name: Configure git credentials
-        uses: OleksiyRudenko/gha-git-credentials@v2.1.1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: Stage Prod Branch
         if: steps.gitversionlast.outputs.majorMinorPatch != steps.gitversioncurrent.outputs.majorMinorPatch
         run: |
           /usr/bin/git checkout prod
           /usr/bin/git checkout -b stage/${{ steps.gitversioncurrent.outputs.semVer }}
-          /usr/bin/git push origin stage/${{ steps.gitversioncurrent.outputs.semVer }}
           /usr/bin/git pull --ff-only origin dev
           /usr/bin/git push origin stage/${{ steps.gitversioncurrent.outputs.semVer }}
