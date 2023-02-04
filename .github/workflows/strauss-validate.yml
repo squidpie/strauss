@@ -63,4 +63,4 @@ jobs:
         run: docker compose up -d
 
       - name: Run Redis Test
-        run: cd tests/redis && ./run.rb
+        run: ./tests/redis/run.rb
