@@ -12,6 +12,8 @@ on:
     types: [assigned, opened, synchronize, reopened]
     branches:
       [dev]
+  workflow_dispatch: {}
+
 jobs:
   validate:
     name: Validate strauss
