@@ -1,8 +1,11 @@
 [workspace]
-members = ["services/chat"]
-default-members = ["services/chat"]
+members = ["services/chat", "lib"]
+default-members = ["services/chat", "lib"]
 
 [workspace.package]
 authors = ["Squidpie"]
 edition = "2021"
 
+[workspace.dependencies]
+redis = "0.22.3"
+strausslib = { path = "lib/" }
