@@ -37,7 +37,10 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0.9.15
       
       - name: Setup Ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: '3.2'
+          bundler-cache: true
 
       - name: Setup Strauss Env
         run: ./scripts/gen-gha-env.sh
@@ -58,23 +61,6 @@ jobs:
         
       - name: Compose Strauss
         run: docker compose up -d
- 
-      - name: Setup Python
-        uses: actions/setup-python@v4.5.0
-      
-      - name: Restore Kafka Testing Environment
-        id: cache-virtualenv
-        uses: syphar/restore-virtualenv@v1
-        with:
-          requirement_files: tests/kafka/requirements.txt
 
-      - name: Download Kafka Testing Environment
-        uses: syphar/restore-pip-download-cache@v1
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
-
-      - name: Install Kafka Testing Environment
-        run: pip install -r tests/kafka/requirements.txt
-        if: steps.cache-virtualenv.outputs.cache-hit != 'true'
-
-      - name: Run Kafka Integration Test
-        run: cd tests/kafka/ && ./run.py config.ini
+      - name: Run Redis Test
+        run: cd tests/redis && bundle exec run.rb
