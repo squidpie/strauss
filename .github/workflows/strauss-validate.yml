@@ -37,7 +37,9 @@ jobs:
         uses: gittools/actions/gitversion/execute@v0.9.15
       
       - name: Setup Ruby
-        uses: actions/setup-ruby@v1
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
 
       - name: Setup Strauss Env
         run: ./scripts/gen-gha-env.sh
@@ -58,9 +60,6 @@ jobs:
         
       - name: Compose Strauss
         run: docker compose up -d
- 
-      - name: Setup Redis Testing Env
-        run: cd tests/redis && bundle install
 
       - name: Run Redis Test
-        run: ./run.rb
+        run: cd tests/redis && ./run.rb
