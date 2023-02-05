@@ -16,3 +16,6 @@ Cargo.lock
 *.log
 packaging/
 .env
+
+# Config
+strauss.yml

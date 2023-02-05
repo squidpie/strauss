@@ -4,5 +4,5 @@ Copyright (C) 2023
 Squidpie
 */
 
-pub
-mod redisclient;
+pub mod redisclient;
+pub mod twitch;

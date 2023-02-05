@@ -4,7 +4,7 @@ Copyright (C) 2023
 Squidpie
 */
 
-pub use redis::{Client, Connection};
+use redis::{Client, Connection};
 use std::error::Error;
 
 pub struct RedisClient {
