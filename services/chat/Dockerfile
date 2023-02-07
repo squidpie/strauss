@@ -4,6 +4,7 @@
 
 FROM debian:bullseye-slim
 WORKDIR /strauss
+RUN apt update && apt install -y ca-certificates
 COPY chat .
 CMD ./chat
-EXPOSE 9092
+EXPOSE 6379

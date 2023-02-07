@@ -41,6 +41,9 @@ jobs:
       - name: Setup Strauss Env
         run: ./scripts/gen-gha-env.sh && cat .env >> $GITHUB_ENV
       
+      - name: Setup Strauss Secrets
+        run: echo ${{ secrets.STRAUSS_SECRETS }} > .secrets
+
       - name: Setup Rust
         uses: actions-rs/toolchain@v1.0.6
         with:
@@ -78,7 +81,7 @@ jobs:
       - name: Rsync Deployment Files
         uses: Burnett01/rsync-deployments@5.2.1
         with:
-          path: packaging/strauss-${{ steps.gitversion.outputs.semVer }}/strauss-${{ steps.gitversion.outputs.semVer }}.tar.gz
+          path: packaging/strauss-${{ steps.gitversion.outputs.semVer }}.tar.gz
           remote_path: ${{ secrets.DEPLOY_PATH }}
           remote_host: ${{ secrets.DEPLOY_HOST }}
           remote_user: ${{ secrets.DEPLOY_USER }}

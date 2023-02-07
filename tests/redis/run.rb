@@ -5,10 +5,10 @@
 
 require 'redis'
 
-$cat="strauss-redis-test"
+$cat="#strauss-redis-test"
 $msg="0xdeadbeef"
 
-redis = Redis.new(url: "redis://127.0.0.1:6379")
+redis = Redis.new(url: "redis://redis:6379")
 
 def client(redis)
   begin
@@ -42,6 +42,7 @@ def publisher(redis)
 end
 
 client = Thread.new { client(redis) }
+sleep(0.1)
 publisher = Thread.new { publisher(redis) }
 publisher.join()
 client.join()

@@ -15,7 +15,10 @@ Cargo.lock
 # Outputs
 *.log
 packaging/
-.env
+.env*
 
 # Config
 strauss.yml
+
+# Secrets
+.secrets

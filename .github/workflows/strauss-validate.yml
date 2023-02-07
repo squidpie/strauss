@@ -45,7 +45,10 @@ jobs:
           bundler-cache: true
 
       - name: Setup Strauss Env
-        run: ./scripts/gen-gha-env.sh
+        run: |
+            ./scripts/gen-gha-env.sh
+            echo ${{ secrets.STRAUSS_SECRETS }} >> .env
+            echo -e "chat:\n\tchannel: squidbot_roboface\n" > strauss.yml
 
       - name: Setup Rust Env
         uses: actions-rs/toolchain@v1.0.6
@@ -58,11 +61,11 @@ jobs:
       - name: Unit Test Services
         run: cargo test
       
-      - name: Build Docker Images
-        run: docker compose build
+      #- name: Build Docker Images
+      #  run: docker compose build
         
-      - name: Compose Strauss
+      - name: Launch Strauss
         run: docker compose up -d
 
-      - name: Run Redis Test
-        run: cd tests/redis && bundle exec run.rb
+      - name: Run Tests
+        run: docker compose -f tests/docker-compose.yml up

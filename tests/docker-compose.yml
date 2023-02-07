@@ -1,0 +1,17 @@
+# docker-compose.yml
+# Copyright (C) 2023
+# Squidpie
+
+version: "3.5"
+
+services:
+    redis-test:
+        build:
+            context: ${STRAUSS_ROOT_DIR}
+            dockerfile: ${STRAUSS_ROOT_DIR}/tests/redis/Dockerfile
+        networks:
+            - strauss
+
+networks:
+    strauss:
+        external: true

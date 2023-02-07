@@ -15,5 +15,9 @@ serde_yaml.workspace = true
 serde = { version = "1.0.152", features = ["serde_derive"] }
 serde_json = "1.0.91"
 twitch-irc = { version = "5.0.0", features = ["with-serde"] }
-tokio = { version = "1.25.0", features = ["rt-multi-thread"] }
+tokio = { version = "1.25.0", features = ["rt-multi-thread", "signal"] }
+#lazy_static = "1.4.0"
+#async-trait = "0.1.64"
+#chrono = "0.4.23"
+#reqwest = { version = "0.11.14", features = ["blocking"] }
 

@@ -21,5 +21,6 @@ cp .env ${RelPath}/
 # Copy deploy script
 cp scripts/deploy.sh ${RelPath}/
 
+# Create Package & Cleanup
 tar czf ${RelName}.tar.gz -C packaging ${RelName}
-mv ${RelName}.tar.gz ${RelPath}/
+rm -r ${RelPath}/
