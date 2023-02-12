@@ -6,8 +6,8 @@
 require 'redis'
 require 'json'
 
-$tx = "#strauss-chat-test"
-$rx = "#strauss-chat-test"
+$tx = "#strauss-chat-msg-tx"
+$rx = "#strauss-chat-msg-rx"
 $test_msg = "meow debug meow"
 
 redis = Redis.new(url: "redis://localhost:6379")
