@@ -6,7 +6,7 @@ ARG version
 FROM debian:bullseye-slim AS base
 ARG STRAUSS_BUILD_DIR
 WORKDIR /strauss
-RUN apt update && apt install -y ca-certificates
+RUN apt update && apt install -y ca-certificates libffi7
 COPY ${STRAUSS_BUILD_DIR}/chat .
 
 FROM base AS val
