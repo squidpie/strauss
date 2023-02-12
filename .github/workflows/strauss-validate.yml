@@ -75,4 +75,4 @@ jobs:
         run: bundle exec tests/redis/run.rb
 
       - name: Run Chat Integration Test
-        run: bundle exec test/debug/run.rb
+        run: bundle exec tests/debug/run.rb
