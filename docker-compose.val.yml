@@ -1,52 +1,9 @@
-# docker-compose.val.yml
+# docker-compose.yml
 # Copyright (C) 2023
 # Squidpie
 
 version: "3.5"
 services:
-    mockserver:
-        image: mockserver/mockserver:5.15.0
-        container_name: mockserver
-        networks:
-            - strauss
+    redis:
         ports:
-            - "1080:1080"
-        environment:
-            MOCKSERVER_PROPERTY_FILE: /config/mockserver.properties
-            MOCKSERVER_INITIALIZATION_JSON_PATH: /config/initializerJson.json
-        command: -logLevel DEBUG
-        volumes:
-            - type: bind
-              source: mockserver/
-              target: /config
-
-    mockserver-status:
-        container_name: mockserver-status
-        build:
-            dockerfile: ${STRAUSS_ROOT_DIR}/mockserver/Dockerfile
-        stdin_open: true
-        tty: true
-        networks:
-            - strauss
-        depends_on:
-            - mockserver
-        healthcheck:
-            test: >
-                wget --method=POST http://mockserver:1080/mockserver/test
-            interval: 5m
-            timeout: 30s
-            retries: 3
-            start_period: 1m
-
-
-    chat:
-        build:
-            args:
-                version: "val"
-        depends_on:
-            mockserver-status:
-                condition: service_healthy
-            mockserver:
-                condition: service_started
-            redis:
-                condition: service_started
+            - "6379:6379"

@@ -10,7 +10,7 @@ $rx = "#strauss-chat-msg-rx";
 $tx = "#strauss-chat-msg-tx";
 $test_msg="meow meow meow";
 
-redis = Redis.new(url: "redis://redis:6379")
+redis = Redis.new(url: "redis://localhost:6379")
 
 def client(redis)
     begin

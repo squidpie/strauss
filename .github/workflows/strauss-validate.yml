@@ -63,10 +63,10 @@ jobs:
         run: cargo test
       
       - name: Launch Strauss
-        run: docker compose --env-file .env.runtime up -d
+        run: docker compose --env-file .env.runtime -f docker-compose.yml -f docker-compose.val.yml up -d
 
       - name: Run Redis Integration Test
-        run: docker compose -f tests/docker-compose.yml run redis-test
+        run: bundle exec tests/chat/run.rb
 
       - name: Run Chat Integration Test
-        run: docker compose -f tests/docker-compose.yml run chat-test
+        run: bundle exec test/redis/run.rb
