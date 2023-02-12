@@ -6,7 +6,7 @@
 require 'redis'
 require 'json'
 
-$tx = "#strauss-chat-test"
+$tx = "#strauss-chat-msg-tx"
 $rx = "#strauss-chat-msg-rx"
 $test_msg = "meow debug meow"
 
@@ -17,12 +17,15 @@ def client(redis)
         redis.subscribe($rx) do |on|
             on.subscribe do |channel, subscribtions|
                 puts "::TEST OUTPUT:: Subscribed to #{channel} (#{subscribtions} subs)"
+                STDOUT.flush
             end
 
 on.message do |channel, msg|
     puts "::TEST OUTPUT:: Received #{channel} - [#{msg}]"
+    STDOUT.flush
     if msg != $test_msg
         puts "::TEST OUTPUT:: TEST FAILED - MSG MISMATCH"
+        STDOUT.flush
         exit(-1)
     end
     exit(0)
@@ -30,6 +33,7 @@ end
 end
 rescue=>error
     puts "::TEST OUTPUT:: SUBSCRIBE FAILED - #{error}"
+    STDOUT.flush
     exit(-1)
 end
 end
@@ -39,6 +43,7 @@ def publisher(redis)
         redis.publish($tx, $test_msg)
     rescue=>error
         puts "::TEST OUTPUT:: PUBLISH FAILED - #{error}"
+        STDOUT.flush
         exit(-1)
     end
 end
