@@ -2,7 +2,7 @@
 # Copyright (C) 2023
 # Squidpie
 
-version: "3.5"
+version: "3.9"
 
 services:
     redis-test:
@@ -17,6 +17,10 @@ services:
             dockerfile: ${STRAUSS_ROOT_DIR}/tests/chat/Dockerfile
         networks:
             - strauss
+        depends_on:
+            redis-test:
+                condition: service_completed_successfully
+                
 networks:
     strauss:
         external: true
