@@ -77,9 +77,9 @@ jobs:
       - name: Run Redis Integration Test
         run: bundle exec tests/redis/run.rb
 
+      - name: Collect Docker Logs
+        uses: jwalton/gh-docker-logs@v2.2.1
+
       - name: Run Chat Integration Test
         run: bundle exec tests/debug/run.rb
 
-      - name: Collect Docker Logs
-        if: failure()
-        uses: jwalton/gh-docker-logs@v2.2.1
