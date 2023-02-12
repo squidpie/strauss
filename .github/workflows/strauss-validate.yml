@@ -65,11 +65,11 @@ jobs:
 
       - name: Run Redis Integration Test
         run: bundle exec tests/redis/run.rb
-        timeout: 5
+        timeout-minutes: 5
 
       - name: Run Chat Integration Test
         run: bundle exec tests/debug/run.rb
-        timeout: 5
+        timeout-minutes: 5
 
       - name: Collect Docker Logs
         if: failure()
