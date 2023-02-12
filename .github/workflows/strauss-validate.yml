@@ -17,7 +17,7 @@ on:
 jobs:
   validate:
     name: Validate strauss
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     env:
       STRAUSS_ROOT_DIR: ${{ github.workspace }}
