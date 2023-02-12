@@ -6,14 +6,15 @@
 require 'redis'
 require 'json'
 
-$ch = "#strauss-chat-test";
+$tx = "#strauss-chat-msg-tx";
+$rx = "#strauss-chat-msg-rx";
 $test_msg="0xdeadbeef"
 
 redis = Redis.new(url: "redis://localhost:6379")
 
 def client(redis)
   begin
-    redis.subscribe($ch) do |on|
+    redis.subscribe($rx) do |on|
       on.subscribe do |channel, subscriptions|
         puts "::TEST OUTPUT:: Subscribed to #{channel} (#{subscriptions} subscriptions)"
       end
@@ -35,7 +36,7 @@ end
 
 def publisher(redis)
   begin
-    redis.publish($ch, $test_msg)
+    redis.publish($tx, $test_msg)
   rescue=>error
     puts "::TEST OUTPUT:: REDIS PUBLISH TEST FAILED - #{error}"
     exit(-1)
