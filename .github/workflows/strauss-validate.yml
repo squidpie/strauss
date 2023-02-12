@@ -76,3 +76,7 @@ jobs:
 
       - name: Run Chat Integration Test
         run: bundle exec tests/debug/run.rb
+
+      - name: Collect Docker Logs
+        if: failure()
+        uses: jwalton/gh-docker-logs@v2.2.1
