@@ -60,7 +60,7 @@ jobs:
         uses: Swatinem/rust-cache@v2.2.0
 
       - name: Build Services
-        run: docker run --rm --user "$(id -u)":"$(id -g)" -v "$PWD":/usr/src/myapp -w /usr/src/myapp rust:1.67.1-slim-bullseye cargo build
+        run: docker compose --env-file .env -f strauss-build.yml run build
 
       - name: Run Services Unit Tests
         run: cargo test
