@@ -46,6 +46,10 @@ cd ~/.strauss
 tar zxf strauss-${Version Tag}.tar.gz --strip-components=1
 ```
 
+###### Start
+```./deploy.sh```
+
+##### Manual Deployment
 ###### Setup Env
 
 ```

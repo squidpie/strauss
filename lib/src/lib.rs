@@ -6,3 +6,4 @@ Squidpie
 
 pub mod redisclient;
 pub mod twitch;
+pub mod config;

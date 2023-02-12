@@ -5,4 +5,9 @@ edition.workspace = true
 authors.workspace = true
 
 [dependencies]
+mockall.workspace = true
+async-trait.workspace = true
 redis.workspace = true
+serde_yaml.workspace = true
+futures-util = "0.3.26"
+futures-core = "0.3.26"

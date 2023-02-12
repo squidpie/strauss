@@ -1,0 +1,12 @@
+  [
+    {
+      "httpRequest" : {
+        "method" : "POST",
+        "path" : "/mockserver/test"
+    },
+      "httpResponse" : {
+        "body" : "{\"wheather\": 20.5}",
+        "statusCode": 200
+      }
+    }
+  ]

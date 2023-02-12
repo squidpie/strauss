@@ -41,8 +41,8 @@ jobs:
       - name: Setup Strauss Env
         run: ./scripts/gen-gha-env.sh && cat .env >> $GITHUB_ENV
       
-      - name: Setup Strauss Secrets
-        run: echo ${{ secrets.STRAUSS_SECRETS }} > .secrets
+      #- name: Setup Strauss Secrets
+      #  run: echo ${{ secrets.STRAUSS_SECRETS }} > .secrets && chmod 600 .secrets
 
       - name: Setup Rust
         uses: actions-rs/toolchain@v1.0.6

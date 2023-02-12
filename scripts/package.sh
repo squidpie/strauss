@@ -2,9 +2,13 @@
 # package.sh
 # Copyright (C) 2023
 # Squidpie
-
+if [[ -z ${GITVERSION_SEMVER} ]]; then
+    echo "Env Var GITVERSION_SEMVER not set"
+    exit -1
+fi
 RelName="strauss-${GITVERSION_SEMVER}"
-RelPath="packaging/${RelName}"
+RelRoot="packaging"
+RelPath="${RelRoot}/${RelName}"
 
 # Setup output dir
 if [ -d "${RelPath}" ]; then rm -Rf ${RelPath}; fi
@@ -22,5 +26,5 @@ cp .env ${RelPath}/
 cp scripts/deploy.sh ${RelPath}/
 
 # Create Package & Cleanup
-tar czf ${RelName}.tar.gz -C packaging ${RelName}
+tar czf ${RelPath}.tar.gz -C packaging ${RelName}
 rm -r ${RelPath}/
