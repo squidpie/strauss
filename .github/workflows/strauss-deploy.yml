@@ -39,18 +39,12 @@ jobs:
         uses: actions/setup-ruby@v1
 
       - name: Setup Strauss Env
-        run: ./scripts/gen-gha-env.sh && cat .env >> $GITHUB_ENV
+        run: |
+            ./scripts/gen-gha-env.sh && \
+            cat .env >> $GITHUB_ENV
       
-      #- name: Setup Strauss Secrets
-      #  run: echo ${{ secrets.STRAUSS_SECRETS }} > .secrets && chmod 600 .secrets
-
-      - name: Setup Rust
-        uses: actions-rs/toolchain@v1.0.6
-        with:
-          toolchain: stable
-
-      - name: Build Services
-        run: cargo build -r --all-features
+      - name: Build & Unit Test Services
+        run: docker compose --env-file .env -f strauss-build.release.yml run build
 
       - name: Build Docker Images
         run: docker compose build

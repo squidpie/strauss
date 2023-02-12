@@ -51,19 +51,8 @@ jobs:
             echo ${{ secrets.STRAUSS_SECRETS }} >> .env.runtime
             printf '%b\n' "chat:\n  channel: squidbot_roboface\n" > strauss.yml
 
-      - name: Setup Rust Env
-        uses: actions-rs/toolchain@v1.0.6
-        with:
-          toolchain: stable
-
-      - name: Rust Cache
-        uses: Swatinem/rust-cache@v2.2.0
-
-      - name: Build Services
-        run: docker compose --env-file .env -f strauss-build.yml run build
-
-      #- name: Run Services Unit Tests
-      #  run: cargo test
+      - name: Build & Unit Test Services
+        run: docker compose --env-file .env -f strauss-build.debug.yml run build
       
       - name: Launch Strauss
         run: |
@@ -76,10 +65,12 @@ jobs:
 
       - name: Run Redis Integration Test
         run: bundle exec tests/redis/run.rb
+        timeout: 5
+
+      - name: Run Chat Integration Test
+        run: bundle exec tests/debug/run.rb
+        timeout: 5
 
       - name: Collect Docker Logs
+        if: failure()
         uses: jwalton/gh-docker-logs@v2.2.1
-
-      #- name: Run Chat Integration Test
-      #  run: bundle exec tests/debug/run.rb
-
