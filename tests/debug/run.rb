@@ -6,7 +6,7 @@
 require 'redis'
 require 'json'
 
-$tx = "#strauss-chat-msg-tx"
+$tx = "#strauss-chat-test"
 $rx = "#strauss-chat-test"
 $test_msg = "meow debug meow"
 
