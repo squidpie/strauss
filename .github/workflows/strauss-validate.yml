@@ -49,7 +49,7 @@ jobs:
             ./scripts/gen-gha-env.sh
             cat .env > .env.runtime
             echo ${{ secrets.STRAUSS_SECRETS }} >> .env.runtime
-            echo -e "chat:\n\tchannel: squidbot_roboface\n" > strauss.yml
+            printf '%b\n' "chat:\n  channel: squidbot_roboface\n" > strauss.yml
 
       - name: Setup Rust Env
         uses: actions-rs/toolchain@v1.0.6
