@@ -72,7 +72,7 @@ jobs:
             up -d
 
       - name: Run Redis Integration Test
-        run: bundle exec tests/chat/run.rb
+        run: bundle exec tests/redis/run.rb
 
       - name: Run Chat Integration Test
-        run: bundle exec test/redis/run.rb
+        run: bundle exec test/debug/run.rb
