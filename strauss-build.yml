@@ -14,6 +14,6 @@ services:
                 apt update
                 apt install pkg-config libssl-dev -y
                 cd /build/
-                cargo build
+                cargo build && cargo test
         volumes:
             - ${STRAUSS_ROOT_DIR}:/build/

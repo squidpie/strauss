@@ -62,8 +62,8 @@ jobs:
       - name: Build Services
         run: docker compose --env-file .env -f strauss-build.yml run build
 
-      - name: Run Services Unit Tests
-        run: cargo test
+      #- name: Run Services Unit Tests
+      #  run: cargo test
       
       - name: Launch Strauss
         run: |
