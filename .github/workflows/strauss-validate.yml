@@ -15,6 +15,9 @@ on:
   workflow_dispatch: {}
 
 jobs:
+  strauss-services:
+      runs-on: ubuntu-latest
+      
   validate:
     name: Validate strauss
     runs-on: ubuntu-latest

@@ -14,29 +14,31 @@ redis = Redis.new(url: "redis://redis:6379")
 
 def client(redis)
   begin
+    puts "::TEST OUTPUT:: Starting Integration Test For Chat"  
     redis.subscribe($rx) do |on|
       on.subscribe do |channel, subscriptions|
-        puts "::TEST OUTPUT:: Subscribed to #{channel} (#{subscriptions} subscriptions)"
+          puts "::TEST OUTPUT:: Subscribed to #{channel} (#{subscriptions} subscriptions)"
       end
 
-    on.message do |channel, msg|
-      msg = JSON.parse(msg)['message_text']  
-      puts "::TEST OUTPUT:: Received #{channel} - [#{msg}]"
-      if msg != $test_msg
-        puts "::TEST OUTPUT:: REDIS RECEIVE TEST FAILED - #{msg}"
-        exit(-1)
+      on.message do |channel, msg|
+        msg = JSON.parse(msg)['message_text']
+        puts "::TEST OUTPUT:: Received #{channel} - [#{msg}]"
+        if msg != $test_msg
+          puts "::TEST OUTPUT:: REDIS RECEIVE TEST FAILED - #{msg}"
+          exit(-1)
+        end
+        exit(0)
       end
-      exit(0)
     end
+  rescue=>error
+    puts "::TEST OUTPUT:: REDIS SUBSCRIBE TEST FAILED - #{error}"
+    exit(-1)
   end
-rescue=>error
-  puts "::TEST OUTPUT:: REDIS SUBSCRIBE TEST FAILED - #{error}"
-  exit(-1)
-end
 end
 
 def publisher(redis)
   begin
+    puts "::TEST OUTPUT:: Sending Test Chat Message"
     redis.publish($tx, $test_msg)
   rescue=>error
     puts "::TEST OUTPUT:: REDIS PUBLISH TEST FAILED - #{error}"
