@@ -67,3 +67,6 @@ jobs:
 
       - name: Run Redis Integration Test
         run: docker compose -f tests/docker-compose.yml run redis-test
+
+      - name: Run Chat Integration Test
+        run: docker compose -f tests/docker-compose.yml run chat-test
