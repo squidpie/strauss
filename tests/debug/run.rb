@@ -6,41 +6,41 @@
 require 'redis'
 require 'json'
 
-$tx = "#strauss-chat-msg-tx";
-$rx = "#strauss-chat-msg-rx";
-$test_msg="0xdeadbeef"
+$tx = "#strauss-chat-test"
+$rx = "#strauss-chat-test"
+$test_msg = "meow debug meow"
 
 redis = Redis.new(url: "redis://localhost:6379")
 
 def client(redis)
-  begin
-    redis.subscribe($rx) do |on|
-      on.subscribe do |channel, subscriptions|
-        puts "::TEST OUTPUT:: Subscribed to #{channel} (#{subscriptions} subscriptions)"
-      end
+    begin
+        redis.subscribe($rx) do |on|
+            on.subscribe do |channel, subscribtions|
+                puts "::TEST OUTPUT:: Subscribed to #{channel} (#{subscribtions} subs)"
+            end
 
-    on.message do |channel, msg|
-      puts "::TEST OUTPUT:: Received #{channel} - [#{msg}]"
-      if msg != $test_msg
-        puts "::TEST OUTPUT:: REDIS RECEIVE TEST FAILED - #{msg}"
+on.message do |channel, msg|
+    puts "::TEST OUTPUT:: Received #{channel} - [#{msg}]"
+    if msg != $test_msg
+        puts "::TEST OUTPUT:: TEST FAILED - MSG MISMATCH"
         exit(-1)
-      end
-      exit(0)
     end
-  end
+    exit(0)
+end
+end
 rescue=>error
-  puts "::TEST OUTPUT:: REDIS SUBSCRIBE TEST FAILED - #{error}"
-  exit(-1)
+    puts "::TEST OUTPUT:: SUBSCRIBE FAILED - #{error}"
+    exit(-1)
 end
 end
 
 def publisher(redis)
-  begin
-    redis.publish($tx, $test_msg)
-  rescue=>error
-    puts "::TEST OUTPUT:: REDIS PUBLISH TEST FAILED - #{error}"
-    exit(-1)
-  end
+    begin
+        redis.publish($tx, $test_msg)
+    rescue=>error
+        puts "::TEST OUTPUT:: PUBLISH FAILED - #{error}"
+        exit(-1)
+    end
 end
 
 client = Thread.new { client(redis) }
@@ -48,4 +48,3 @@ sleep(0.1)
 publisher = Thread.new { publisher(redis) }
 publisher.join()
 client.join()
-
