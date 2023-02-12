@@ -56,6 +56,9 @@ jobs:
         with:
           toolchain: stable
 
+      - name: Rust Cache
+        uses: Swatinem/rust-cache@v2.2.0
+
       - name: Build Services
         run: cargo build
 
