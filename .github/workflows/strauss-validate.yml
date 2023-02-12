@@ -65,5 +65,8 @@ jobs:
       - name: Launch Strauss
         run: docker compose --env-file .env.runtime up -d
 
-      - name: Run Tests
-        run: docker compose --env-file .env -f tests/docker-compose.yml up
+      - name: Run Redis Tests
+        run: docker compose -f tests/docker-compose.yml run redis-test
+
+      - name: Run Chat Tests
+        run: docker compose -f tests/docker-compose.yml run chat-test
