@@ -21,7 +21,7 @@ jobs:
 
     env:
       STRAUSS_ROOT_DIR: ${{ github.workspace }}
-      STRAUSS_BUILD_DIR: ${{ github.workspace }}/target/debug
+      STRAUSS_BUILD_DIR: target/debug
       
     steps:
       - name: Checkout
