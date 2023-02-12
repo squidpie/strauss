@@ -2,7 +2,7 @@
 # run.rb
 # Copyright (C) 2023
 # Squidpie
-
+puts "::DEBUG OUTPUT::TOP OF FILE";
 require 'redis'
 require 'json'
 
@@ -11,6 +11,8 @@ $tx = "#strauss-chat-msg-tx";
 $test_msg="meow meow meow";
 
 redis = Redis.new(url: "redis://redis:6379")
+
+puts "::DEBUG OUTPUT::REDIS CREATED";
 
 def client(redis)
     begin
@@ -35,6 +37,8 @@ def client(redis)
         exit(-1)
     end
 end
+
+puts "::DEBUG OUTPUT::CLIENT CREATED";
 
 def publisher(redis)
     begin
