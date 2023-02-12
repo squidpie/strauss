@@ -2,7 +2,7 @@
 # run.rb
 # Copyright (C) 2023
 # Squidpie
-puts "::DEBUG OUTPUT::TOP OF FILE";
+
 require 'redis'
 require 'json'
 
@@ -12,11 +12,9 @@ $test_msg="meow meow meow";
 
 redis = Redis.new(url: "redis://redis:6379")
 
-puts "::DEBUG OUTPUT::REDIS CREATED";
-
 def client(redis)
     begin
-        puts "::TEST OUTPUT:: Starting Integration Test For Chat";
+        puts "::TEST OUTPUT:: Starting Chat Integration Test";
         redis.subscribe($rx) do |on|
             on.subscribe do |channel, subscriptions|
                 puts "::TEST OUTPUT:: Subscribed to #{channel} (#{subscriptions} subscriptions)";
@@ -38,8 +36,6 @@ def client(redis)
     end
 end
 
-puts "::DEBUG OUTPUT::CLIENT CREATED";
-
 def publisher(redis)
     begin
         puts "::TEST OUTPUT:: Sending Test Chat Message";
@@ -50,7 +46,6 @@ def publisher(redis)
     end
 end
 
-puts "::TEST OUTPUT:: STARTING CHAT TEST";
 client = Thread.new { client(redis) }
 sleep(0.1)
 publisher = Thread.new { publisher(redis) }
