@@ -55,7 +55,13 @@ jobs:
         run: docker compose --env-file .env -f strauss-build.debug.yml run build
       
       - name: Launch Strauss
-        run: docker compose --env-file .env.runtime up -d
+        run: |
+            docker compose \
+            --env-file .env.runtime \
+            -f docker-compose.yml \
+            -f docker-compose.override.yml \
+            -f docker-compose.val.yml \
+            up -d
 
       - name: Run Redis Integration Test
         run: bundle exec tests/redis/run.rb
