@@ -64,3 +64,24 @@ docker compose --env-file=.env.runtime -f docker-compose.yml -f docker-compose.p
 docker compose --env-file=.env.runtime -f docker-compose.yml -f docker-compose.prod.yml up -d --remove-orphans
 docker image prune -f
 ```
+
+
+### Build
+#### Debian
+```
+./scripts/gen-dev-env.sh
+cargo build
+cargo test
+docker compose build
+```
+
+#### Other
+*Note* this will produce a target dir owned by root
+```
+./scripts/gen-dev-env.sh
+docker compose --env-file .env -f strauss-build.prod.yml run build
+docker compose build
+```
+
+#### Create Deployment Package
+``` ./scripts/package.sh ```
