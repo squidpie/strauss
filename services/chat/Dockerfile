@@ -6,23 +6,25 @@ ARG version
 FROM debian:bullseye-slim AS base
 ARG STRAUSS_BUILD_DIR
 WORKDIR /strauss
-RUN apt update && apt install -y ca-certificates
+RUN apt update && apt install -y --no-install-recommends ca-certificates
 COPY ${STRAUSS_BUILD_DIR}/chat .
 
 FROM base AS val
-RUN apt install -y curl
-RUN echo "CONFIGURING VAL PROXY"
-ENV http_proxy="http://doe:p@ssw0rd@mockserver:1090/"
-ENV https_proxy="http://doe:p@ssw0rd@mockserver:1090/"
-ENV ftp_proxy="http://doe:p@ssw0rd@mockserver:1090/"
-ENV no_proxy="127.0.0.1,localhost,mockserver"
-ENV HTTP_PROXY="http://doe:p@ssw0rd@mockserver:1090/"
-ENV HTTPS_PROXY="http://doe:p@ssw0rd@mockserver:1090/"
-ENV FTP_PROXY="http://doe:p@ssw0rd@mockserver:1090/"
-ENV NO_PROXY="127.0.0.1,localhost,mockserver"
+RUN apt install -y --no-install-recommends \
+    curl \
+    sudo \
+    tcpdump \
+    net-tools \
+    netcat \
+    procps \
+    dnsutils \
+    unzip \
+    lsof  
+COPY scripts/entrypoint.val.sh .
+ENTRYPOINT ["/strauss/entrypoint.val.sh", "/strauss/chat"]
 
 FROM base AS prod
+ENTRYPOINT ["/strauss/chat"]
 
 FROM ${version} AS final
-ENTRYPOINT ["/strauss/chat"]
 EXPOSE 6379
