@@ -1,0 +1,13 @@
+# docker-compose.yml
+# Copyright (C) 2023
+# Squidpie
+
+version: "3.5"
+services:
+    redis:
+        ports:
+            - "6379:6379"
+    chat:
+        build:
+            args:
+                version: val

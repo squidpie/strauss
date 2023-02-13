@@ -4,22 +4,25 @@
 
 version: "3.5"
 services:
-  msg-server:
-    image: redis:7.0.6-alpine
-    container_name: msg_server
-    networks:
-      - redis
-    ports:
-      - '6379:6379'
+    redis:
+        image: redis:7.0.6-alpine
+        container_name: redis
+        networks:
+            - strauss
 
-  chat:
-    image: strauss/chat:${STRAUSS_CHAT_PKG_VERSION}
-    container_name: chat
-    networks:
-      - redis
-    depends_on:
-      - msg-server
+    chat:
+        image: strauss/chat:${STRAUSS_CHAT_PKG_VERSION}
+        container_name: chat
+        environment:
+            TWITCH_USER: ${TWITCH_USER}
+            TWITCH_TOKEN: ${TWITCH_TOKEN}
+        networks:
+            - strauss
+        volumes:
+            - ./strauss.yml:/strauss/strauss.yml
+        depends_on:
+            - redis
 
 networks:
-  redis:
-    name: redis
+    strauss:
+        name: strauss

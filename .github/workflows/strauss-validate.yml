@@ -17,11 +17,11 @@ on:
 jobs:
   validate:
     name: Validate strauss
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     env:
       STRAUSS_ROOT_DIR: ${{ github.workspace }}
-      STRAUSS_BUILD_DIR: ${{ github.workspace }}/target/debug
+      STRAUSS_BUILD_DIR: target/debug
       
     steps:
       - name: Checkout
@@ -45,24 +45,33 @@ jobs:
           bundler-cache: true
 
       - name: Setup Strauss Env
-        run: ./scripts/gen-gha-env.sh
+        run: |
+            ./scripts/gen-gha-env.sh
+            cat .env > .env.runtime
+            echo ${{ secrets.STRAUSS_SECRETS }} >> .env.runtime
+            printf '%b\n' "chat:\n  channel: squidbot_roboface\n" > strauss.yml
 
-      - name: Setup Rust Env
-        uses: actions-rs/toolchain@v1.0.6
-        with:
-          toolchain: stable
-
-      - name: Build Services
-        run: cargo build
-
-      - name: Unit Test Services
-        run: cargo test
+      - name: Build & Unit Test Services
+        run: docker compose --env-file .env -f strauss-build.debug.yml run build
       
-      - name: Build Docker Images
-        run: docker compose build
-        
-      - name: Compose Strauss
-        run: docker compose up -d
+      - name: Launch Strauss
+        run: |
+            docker compose \
+            --env-file .env.runtime \
+            -f docker-compose.yml \
+            -f docker-compose.override.yml \
+            -f docker-compose.val.yml \
+            up -d
 
-      - name: Run Redis Test
-        run: cd tests/redis && bundle exec run.rb
+      - name: Run Redis Integration Test
+        run: bundle exec tests/redis/run.rb
+        timeout-minutes: 1
+
+      # DISABLED : [TODO] IMPLEMENT MOCKSERVER
+      #- name: Run Chat Integration Test
+      #  run: bundle exec tests/debug/run.rb
+      #  timeout-minutes: 5
+
+      - name: Collect Docker Logs
+        if: failure()
+        uses: jwalton/gh-docker-logs@v2.2.1

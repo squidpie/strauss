@@ -4,22 +4,23 @@
 # Squidpie
 
 require 'redis'
+require 'json'
 
-$cat="strauss-redis-test"
-$msg="0xdeadbeef"
+$ch = "#strauss-chat-test";
+$test_msg="0xdeadbeef"
 
-redis = Redis.new(url: "redis://127.0.0.1:6379")
+redis = Redis.new(url: "redis://localhost:6379")
 
 def client(redis)
   begin
-    redis.subscribe($cat) do |on|
+    redis.subscribe($ch) do |on|
       on.subscribe do |channel, subscriptions|
-        puts "::TEST OUTPUT:: Subscribed to ##{channel} (#{subscriptions} subscriptions)"
+        puts "::TEST OUTPUT:: Subscribed to #{channel} (#{subscriptions} subscriptions)"
       end
 
     on.message do |channel, msg|
-      puts "::TEST OUTPUT:: Received ##{channel} - [#{msg}]"
-      if $msg != msg
+      puts "::TEST OUTPUT:: Received #{channel} - [#{msg}]"
+      if msg != $test_msg
         puts "::TEST OUTPUT:: REDIS RECEIVE TEST FAILED - #{msg}"
         exit(-1)
       end
@@ -34,7 +35,7 @@ end
 
 def publisher(redis)
   begin
-    redis.publish($cat, $msg)
+    redis.publish($ch, $test_msg)
   rescue=>error
     puts "::TEST OUTPUT:: REDIS PUBLISH TEST FAILED - #{error}"
     exit(-1)
@@ -42,6 +43,7 @@ def publisher(redis)
 end
 
 client = Thread.new { client(redis) }
+sleep(0.1)
 publisher = Thread.new { publisher(redis) }
 publisher.join()
 client.join()

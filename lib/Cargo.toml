@@ -1,8 +1,13 @@
 [package]
 name = "strausslib"
-version = "0.1.0"
+version = "0.1.1"
 edition.workspace = true
 authors.workspace = true
 
 [dependencies]
+mockall.workspace = true
+async-trait.workspace = true
 redis.workspace = true
+serde_yaml.workspace = true
+futures-util = "0.3.26"
+futures-core = "0.3.26"
