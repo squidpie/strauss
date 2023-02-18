@@ -77,8 +77,9 @@ Token' -> [Token Generator](https://twitchtokengenerator.com/)
 ###### strauss.yml
 
 ```
-chat:
-    channel: ${Your Channel}
+services:
+    chat:
+        channel: ${Your Channel}
 ```
 
 ### Deploy

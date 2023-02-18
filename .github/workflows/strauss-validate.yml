@@ -49,28 +49,21 @@ jobs:
             ./scripts/gen-gha-env.sh
             cat .env > .env.runtime
             echo ${{ secrets.STRAUSS_SECRETS }} >> .env.runtime
-            printf '%b\n' "chat:\n  channel: squidbot_roboface\n" > strauss.yml
+            printf '%b\n' "services:\n    chat:\n        channel: squidbot_roboface\n" > strauss.yml
 
       - name: Build & Unit Test Services
         run: docker compose --env-file .env -f strauss-build.debug.yml run build
       
-      - name: Launch Strauss
+      - name: Run Integration Tests
         run: |
-            docker compose \
-            --env-file .env.runtime \
-            -f docker-compose.yml \
-            -f docker-compose.override.yml \
-            -f docker-compose.val.yml \
-            up -d
-
-      - name: Run Redis Integration Test
-        run: bundle exec tests/redis/run.rb
-        timeout-minutes: 1
-
-      # DISABLED : [TODO] IMPLEMENT MOCKSERVER
-      #- name: Run Chat Integration Test
-      #  run: bundle exec tests/debug/run.rb
-      #  timeout-minutes: 5
+            docker compose --env-file .env.runtime \
+                -f docker-compose.yml \
+                -f docker-compose.override.yml \
+                -f docker-compose.val.yml \
+                up -d
+            bundle exec tests/redis/run.rb
+            bundle exec tests/chat/run.rb
+        timeout-minutes: 5
 
       - name: Collect Docker Logs
         if: failure()
