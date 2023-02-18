@@ -15,7 +15,7 @@ use std::future::Future;
 use std::pin::Pin;
 use tokio::task::LocalSet;
 
-use strausslib::config::FileReader;
+use strausslib::config::{FileReader, StraussConfigLoad};
 use strausslib::redisclient::{RedisClient, RedisWrapper};
 use strausslib::twitch::chat::STRAUSS_CHAT_MSG_RX_REDIS_CH;
 use strausslib::twitch::chat::STRAUSS_CHAT_MSG_TX_REDIS_CH;
@@ -66,7 +66,8 @@ impl Listen for TwitchListener {
 
 async fn run() -> Pin<Box<dyn Future<Output = ()>>> {
     let yml_reader = Box::new(FileReader {});
-    let config = Box::new(TwitchConfig::load(yml_reader));
+    let config = StraussConfigLoad::load(yml_reader);
+    let config = Box::new(TwitchConfig::load(config));
 
     let twitch = Box::new(ChatWrapper::new(config.clone()));
     let redis = Box::new(RedisWrapper::new(STRAUSS_CHAT_MSG_TX_REDIS_CH.to_owned()).await);

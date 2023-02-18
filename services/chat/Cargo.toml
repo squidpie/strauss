@@ -17,4 +17,4 @@ async-trait.workspace = true
 serde.workspace = true
 serde_json.workspace = true
 tokio.workspace = true
-twitch-irc = { version = "5.0.0", features = ["with-serde"] }
+twitch-irc.workspace = true
