@@ -68,10 +68,17 @@ impl std::fmt::Debug for Box<dyn ChatClient> {
 #[async_trait(?Send)]
 impl Say for ChatWrapper {
     async fn say(&self, msg: String) {
-        self.client
-            .say(self.ch.to_owned(), msg)
-            .await
-            .expect("<ChatWrapper>::ERROR::TWITCH SAY FAILED");
+        match msg.find(&String::from("/me")) {
+            Some(0) => {
+                self.client.me(self.ch.to_owned(), msg.replace("/me", "")).await.expect("MEOW");
+            },
+            _ => {
+                self.client
+                    .say(self.ch.to_owned(), msg)
+                    .await
+                    .expect("<ChatWrapper>::ERROR::TWITCH SAY FAILED");
+            }
+        };
     }
 }
 
