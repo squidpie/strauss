@@ -4,33 +4,6 @@
 
 version: "3.5"
 services:
-    #redis:
-    #    image: redis:7.0.6-alpine
-    #    container_name: redis
-    #    ports:
-    #        - "6379:6379"
-    #    networks:
-    #        - strauss
-    #
-    #chat:
-    #    image: strauss/chat:${STRAUSS_CHAT_PKG_VERSION}
-    #    container_name: chat
-    #    environment:
-    #        TWITCH_USER: ${TWITCH_USER}
-    #        TWITCH_TOKEN: ${TWITCH_TOKEN}
-    #    build:
-    #        context: ${STRAUSS_ROOT_DIR}
-    #        dockerfile: ${STRAUSS_ROOT_DIR}/services/chat/Dockerfile
-    #        args:
-    #            version: "val"
-    #            STRAUSS_BUILD_DIR: ${STRAUSS_BUILD_DIR}
-    #    networks:
-    #        - strauss
-    #    volumes:
-    #        - ./strauss.yml:/strauss/strauss.yml
-    #    depends_on:
-    #        - redis
-
     redis-test:
         build:
             context: ${STRAUSS_ROOT_DIR}
@@ -45,12 +18,35 @@ services:
             context: ${STRAUSS_ROOT_DIR}
             dockerfile: ${STRAUSS_ROOT_DIR}/tests/chat/Dockerfile
         networks:
-            - strauss
+           - strauss
         depends_on:
             - chat
 
+    redis:
+        image: redis:7.0.6-alpine
+        container_name: redis
+        networks:
+            - strauss
+
+    chat:
+        image: strauss/chat:${STRAUSS_CHAT_PKG_VERSION}
+        container_name: chat
+        build:
+            context: ${STRAUSS_ROOT_DIR}
+            dockerfile: ${STRAUSS_ROOT_DIR}/services/chat/Dockerfile
+            args:
+                version: "prod"
+                STRAUSS_BUILD_DIR: ${STRAUSS_BUILD_DIR}        
+        environment:
+            TWITCH_USER: ${TWITCH_USER}
+            TWITCH_TOKEN: ${TWITCH_TOKEN}
+        networks:
+            - strauss
+        volumes:
+            - ./strauss.yml:/strauss/strauss.yml
+        depends_on:
+            - redis
+
 networks:
     strauss:
-        # name: strauss
-        # external: true
-        driver: overlay
+        name: strauss
