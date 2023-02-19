@@ -17,7 +17,7 @@ on:
 jobs:
   validate:
     name: Validate strauss
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     env:
       STRAUSS_ROOT_DIR: ${{ github.workspace }}
@@ -63,7 +63,7 @@ jobs:
             key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Build & Unit Test Services
-        if: steps.cache-rust.outputs.cache-hit != 'true'
+        #if: steps.cache-rust.outputs.cache-hit != 'true'
         run: docker compose --env-file .env -f strauss-build.debug.yml run build
       
       - name: Run Integration Tests
