@@ -1,0 +1,14 @@
+# docker-compose.yml
+# Copyright (C) 2023
+# Squidpie
+
+version: "3.5"
+services:
+    redis:
+        network_mode: host
+    chat:
+        network_mode: host
+    redis-test:
+        network_mode: host
+    chat-test:
+        network_mode: host
