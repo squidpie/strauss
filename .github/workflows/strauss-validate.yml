@@ -71,11 +71,16 @@ jobs:
                 -f docker-compose.gha.yml \
                 up -d
 
-      - name: Get Test Status
+      - name: Redis Debug
         run: |
-            sleep 45
-            docker logs `docker container ls -a | grep chat-test | awk '{print $1}'` | grep "PASSED" && \
-            docker logs `docker container ls -a | grep redis-test | awk '{print $1}'` | grep "PASSED"
+            docker exec -it `docker container ls | grep "redis:7" | awk '{print $1}'` sh
+            redis-cli
+            PUBLISH #strauss-chat-msg-tx "github action debug"
+      #- name: Get Test Status
+      #  run: |
+      #      sleep 45
+      #      docker logs `docker container ls -a | grep chat-test | awk '{print $1}'` | grep "PASSED" && \
+      #      docker logs `docker container ls -a | grep redis-test | awk '{print $1}'` | grep "PASSED"
 
       - name: Inspect Dockers
         if: failure()
