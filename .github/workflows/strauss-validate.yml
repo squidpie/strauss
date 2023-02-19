@@ -71,11 +71,11 @@ jobs:
                 -f docker-compose.gha.yml \
                 up -d
 
-      - name: Redis Debug
-        run: |
-            docker exec -it `docker container ls | grep "redis:7" | awk '{print $1}'` sh
-            redis-cli
-            PUBLISH #strauss-chat-msg-tx "github action debug"
+      #- name: Redis Debug
+      #  run: |
+      #      docker exec -it `docker container ls | grep "redis:7" | awk '{print $1}'` sh
+      #      redis-cli
+      #      PUBLISH #strauss-chat-msg-tx "github action debug"
       #- name: Get Test Status
       #  run: |
       #      sleep 45
@@ -91,5 +91,5 @@ jobs:
             docker inspect `docker container ls -a | grep "redis-test" | awk '{print $1}'`
       
       - name: Collect Docker Logs
-        if: failure()
+        #if: failure()
         uses: jwalton/gh-docker-logs@v2.2.1
