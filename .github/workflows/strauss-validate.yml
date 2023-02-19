@@ -79,6 +79,7 @@ jobs:
             docker logs `docker container ls -a | grep redis-test | awk '{print $1}'` | grep "PASSED"
 
       - name: Inspect Dockers
+        if: failure()
         run: |
             docker inspect `docker container ls -a | grep "strauss/chat" | awk '{print $1}'`
             docker inspect `docker container ls -a | grep "redis:7" | awk '{print $1}'`
