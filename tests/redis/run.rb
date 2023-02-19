@@ -9,7 +9,7 @@ require 'json'
 $ch = "#strauss-chat-test";
 $test_msg="0xdeadbeef"
 
-redis = Redis.new(url: "redis://localhost:6379")
+redis = Redis.new(url: "redis://redis:6379")
 
 def client(redis)
   begin

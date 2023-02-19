@@ -51,7 +51,19 @@ jobs:
             echo ${{ secrets.STRAUSS_SECRETS }} >> .env.runtime
             printf '%b\n' "services:\n    chat:\n        channel: squidbot_roboface\n" > strauss.yml
 
+      - uses: actions/cache@v3
+        id: cache-rust
+        with:
+            path: |
+                ~/.cargo/bin/
+                ~/.cargo/registry/index/
+                ~/.cargo/registry/cache/
+                ~/.cargo/git/db/
+                target/
+            key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+
       - name: Build & Unit Test Services
+        if: steps.cache-rust.outputs.cache-hit != 'true'
         run: docker compose --env-file .env -f strauss-build.debug.yml run build
       
       - name: Run Integration Tests
