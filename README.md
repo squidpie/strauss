@@ -22,7 +22,7 @@ Transports Twitch Chat to Redis Network.
 | #strauss-chat-msg-rx | Receive Twitch Chat     |
 
 ### Build
-#### Debian
+#### Debian:Bullseye
 Install System Dependencies
 ```
 sudo apt install pkg-config libssl-dev

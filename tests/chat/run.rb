@@ -54,6 +54,7 @@ def publisher(redis)
     end
 end
 
+sleep(30)
 client = Thread.new { client(redis) }
 sleep(0.1)
 publisher = Thread.new { publisher(redis) }
