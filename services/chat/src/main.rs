@@ -45,6 +45,7 @@ trait Listen {
 impl Listen for RedisListener {
     async fn listen(&mut self) {
         let val = self.redis.pubsub().await;
+        println!("::DEBUG OUTPUT::RedisListener Processing Message");
         self.twitch.say(val).await;
     }
 }
@@ -53,6 +54,7 @@ impl Listen for RedisListener {
 impl Listen for TwitchListener {
     async fn listen(&mut self) {
         if let Some(json) = self.twitch.recv().await {
+            println!("::DEBUG OUTPUT::TwitchListener Processing Message");
             self.redis
                 .publish(
                     STRAUSS_CHAT_MSG_RX_REDIS_CH.to_owned(),
