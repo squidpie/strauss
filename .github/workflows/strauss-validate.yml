@@ -68,6 +68,7 @@ jobs:
       
       - name: Run Integration Tests
         run: |
+            docker compose --env-file .env.runtime up -d
             docker compose --env-file .env.runtime \
                 -f docker-compose.gha.yml \
                 up -d
