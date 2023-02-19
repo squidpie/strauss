@@ -37,7 +37,6 @@ docker compose build
 ```
 
 #### Other
-*Note* this will produce a target dir owned by root
 From Repo Root:
 ```
 ./scripts/gen-dev-env.sh
