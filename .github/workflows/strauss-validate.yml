@@ -57,9 +57,6 @@ jobs:
       - name: Run Integration Tests
         run: |
             docker compose --env-file .env.runtime \
-                -f docker-compose.yml \
-                -f docker-compose.override.yml \
-                -f docker-compose.val.yml \
                 -f docker-compose.gha.yml \
                 up -d
         timeout-minutes: 5
