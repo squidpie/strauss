@@ -37,8 +37,8 @@ services:
             dockerfile: ${STRAUSS_ROOT_DIR}/tests/redis/Dockerfile
         networks:
             - strauss
-        #depends_on:
-        #    - redis
+        depends_on:
+            - redis
 
     chat-test:
         build:
@@ -46,11 +46,11 @@ services:
             dockerfile: ${STRAUSS_ROOT_DIR}/tests/chat/Dockerfile
         networks:
             - strauss
-        #depends_on:
-        #    - chat
+        depends_on:
+            - chat
 
 networks:
     strauss:
-        name: strauss
-        external: true
-        #driver: host
+        # name: strauss
+        # external: true
+        driver: host
