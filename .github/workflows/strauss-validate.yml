@@ -73,6 +73,7 @@ jobs:
 
       - name: Verify Chat is Running
         run: |
+            sleep 45
             docker inspect `docker container ls -a | grep "strauss/chat" | awk '{print $1}'` --format='{{.State.Running}}' | grep true
 
       - name: Inspect Dockers
