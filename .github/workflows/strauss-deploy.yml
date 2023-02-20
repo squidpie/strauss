@@ -18,7 +18,7 @@ jobs:
   
     env:
       STRAUSS_ROOT_DIR: ${{ github.workspace }}
-      STRAUSS_BUILD_DIR: ${{ github.workspace }}/target/release
+      STRAUSS_BUILD_DIR: target/release
 
     steps:
       - name: Checkout

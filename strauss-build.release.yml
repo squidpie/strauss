@@ -15,5 +15,7 @@ services:
                 apt install pkg-config libssl-dev -y
                 cd /build/
                 cargo build -r && cargo test
+                chown -R ${UID} target/
+                chgrp -R ${GUID} target/            
         volumes:
             - ${STRAUSS_ROOT_DIR}:/build/
