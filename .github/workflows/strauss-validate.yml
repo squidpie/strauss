@@ -65,25 +65,18 @@ jobs:
       - name: Build & Unit Test Services
         run: docker compose --env-file .env -f strauss-build.debug.yml run build
       
-      - name: Run Integration Tests
+      - name: Run Strauss
         run: |
             docker compose --env-file .env.runtime \
                 -f docker-compose.gha.yml \
                 up -d
 
-      #- name: Redis Debug
-      #  run: |
-      #      docker exec -it `docker container ls | grep "redis:7" | awk '{print $1}'` sh
-      #      redis-cli
-      #      PUBLISH #strauss-chat-msg-tx "github action debug"
-      #- name: Get Test Status
-      #  run: |
-      #      sleep 45
-      #      docker logs `docker container ls -a | grep chat-test | awk '{print $1}'` | grep "PASSED" && \
-      #      docker logs `docker container ls -a | grep redis-test | awk '{print $1}'` | grep "PASSED"
+      - name: Verify Chat is Running
+        run: |
+            docker inspect `docker container ls -a | grep "strauss/chat" | awk '{print $1}'` --format='{{.State.Running}}' | grep true
 
       - name: Inspect Dockers
-        if: failure()
+        #if: failure()
         run: |
             docker inspect `docker container ls -a | grep "strauss/chat" | awk '{print $1}'`
             docker inspect `docker container ls -a | grep "redis:7" | awk '{print $1}'`
