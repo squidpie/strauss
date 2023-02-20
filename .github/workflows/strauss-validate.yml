@@ -45,11 +45,7 @@ jobs:
           bundler-cache: true
 
       - name: Setup Strauss Env
-        run: |
-            ./scripts/gen-gha-env.sh
-            cat .env > .env.runtime
-            echo ${{ secrets.STRAUSS_SECRETS }} >> .env.runtime
-            printf '%b\n' "services:\n    chat:\n        channel: squidbot_roboface\n" > strauss.yml
+        run: ./scripts/gen-gha-env.sh
 
       - uses: actions/cache@v3
         id: cache-rust
@@ -64,26 +60,12 @@ jobs:
 
       - name: Build & Unit Test Services
         run: docker compose --env-file .env -f strauss-build.debug.yml run build
-      
-      - name: Run Strauss
-        run: |
-            docker compose --env-file .env.runtime \
-                -f docker-compose.gha.yml \
-                up -d
 
-      - name: Verify Chat is Running
-        run: |
-            sleep 45
-            docker inspect `docker container ls -a | grep "strauss/chat" | awk '{print $1}'` --format='{{.State.Running}}' | grep true
-
-      - name: Inspect Dockers
-        #if: failure()
-        run: |
-            docker inspect `docker container ls -a | grep "strauss/chat" | awk '{print $1}'`
-            docker inspect `docker container ls -a | grep "redis:7" | awk '{print $1}'`
-            docker inspect `docker container ls -a | grep "chat-test" | awk '{print $1}'`
-            docker inspect `docker container ls -a | grep "redis-test" | awk '{print $1}'`
+      - name: Debugging with ssh
+        uses: lhotari/action-upterm@v1
+        with:
+            limit-access-to-actor: true
       
       - name: Collect Docker Logs
-        #if: failure()
+        if: failure()
         uses: jwalton/gh-docker-logs@v2.2.1

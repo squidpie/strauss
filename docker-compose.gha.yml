@@ -23,12 +23,14 @@ services:
             - chat
 
     redis:
+        tty: true
         image: redis:7.0.6-alpine
         container_name: redis
         networks:
             - strauss
 
     chat:
+        tty: true
         image: strauss/chat:${STRAUSS_CHAT_PKG_VERSION}
         container_name: chat
         build:
