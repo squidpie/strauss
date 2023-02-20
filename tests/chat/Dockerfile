@@ -8,4 +8,4 @@ WORKDIR /usr/src/app
 COPY Gemfile Gemfile.lock ./
 RUN bundle install
 COPY tests/chat/run.rb .
-CMD ["bundle exec run.rb"]
+CMD ["./run.rb"]

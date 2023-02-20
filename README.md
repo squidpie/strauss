@@ -22,7 +22,7 @@ Transports Twitch Chat to Redis Network.
 | #strauss-chat-msg-rx | Receive Twitch Chat     |
 
 ### Build
-#### Debian
+#### Debian:Bullseye
 Install System Dependencies
 ```
 sudo apt install pkg-config libssl-dev
@@ -37,7 +37,6 @@ docker compose build
 ```
 
 #### Other
-*Note* this will produce a target dir owned by root
 From Repo Root:
 ```
 ./scripts/gen-dev-env.sh
@@ -77,8 +76,9 @@ Token' -> [Token Generator](https://twitchtokengenerator.com/)
 ###### strauss.yml
 
 ```
-chat:
-    channel: ${Your Channel}
+services:
+    chat:
+        channel: ${Your Channel}
 ```
 
 ### Deploy
