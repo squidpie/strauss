@@ -3,7 +3,7 @@
 # Squidpie
 
 name: strauss-validate
-run-name: ${{ github.actor }} is validating strauss
+run-name: ${{ github.actor }} is validating ${{ github.ref_name }}
 on:
   push:
     branches:
@@ -48,7 +48,6 @@ jobs:
         run: ./scripts/gen-gha-env.sh
 
       - uses: actions/cache@v3
-        id: cache-rust
         with:
             path: |
                 ~/.cargo/bin/
@@ -60,11 +59,6 @@ jobs:
 
       - name: Build & Unit Test Services
         run: docker compose --env-file .env -f strauss-build.debug.yml run build
-
-      - name: Debugging with ssh
-        uses: lhotari/action-upterm@v1
-        with:
-            limit-access-to-actor: true
       
       - name: Collect Docker Logs
         if: failure()

@@ -9,9 +9,12 @@ services:
             - "6379:6379"
     chat:
         build:
-            args:
-                version: val
-
+          context: ${STRAUSS_ROOT_DIR}
+          dockerfile: ${STRAUSS_ROOT_DIR}/services/chat/Dockerfile
+          args:
+            version: "val"  
+            STRAUSS_BUILD_DIR: ${STRAUSS_BUILD_DIR}
+            
     redis-test:
         build:
             context: ${STRAUSS_ROOT_DIR}

@@ -42,6 +42,16 @@ jobs:
         run: |
             ./scripts/gen-gha-env.sh && \
             cat .env >> $GITHUB_ENV
+
+      - uses: actions/cache@v3
+        with:
+            path: |
+                ~/.cargo/bin/
+                ~/.cargo/registry/index/
+                ~/.cargo/registry/cache/
+                ~/.cargo/git/db/
+                target/
+            key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}        
       
       - name: Build & Unit Test Services
         run: docker compose --env-file .env -f strauss-build.release.yml run build

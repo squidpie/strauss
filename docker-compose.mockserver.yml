@@ -38,8 +38,8 @@ services:
             retries: 3
             start_period: 1m
 
-
     chat:
+        network_mode: service:mockserver
         depends_on:
             mockserver-status:
                 condition: service_healthy
